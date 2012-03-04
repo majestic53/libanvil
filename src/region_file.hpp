@@ -232,6 +232,11 @@ public:
 	int get_region_z_coord(void) { return z; }
 
 	/*
+	 * Returns true if a specified path is a region file
+	 */
+	static bool is_region_file(const std::string &path, int &x, int &z);
+
+	/*
 	 * Reads in a series of region chunks
 	 */
 	void read(void) { read(path); }

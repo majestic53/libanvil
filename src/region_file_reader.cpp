@@ -123,46 +123,76 @@ void region_file_reader::cache_coord(unsigned int x, unsigned int z, unsigned in
  * Returns a chunk tag biome value at a given x, z & b coord
  */
 int8_t region_file_reader::get_biome_at(unsigned int x, unsigned int z, unsigned int b_x, unsigned int b_z) {
+	std::vector<generic_tag *> biome;
 	unsigned int pos = varify_coord(x, z, region_dim::REGION_X, region_dim::REGION_AREA),
 			b_pos = varify_coord(b_x, b_z, region_dim::CHUNK_X, region_dim::CHUNK_AREA);
 
 	// retrieve chunk data if it is not cached
 	cache_coord(x, z, pos);
-	return static_cast<byte_array_tag *>(data[pos].get_tag_by_name("Biomes").at(0))->value.at(b_pos);
+	biome = data[pos].get_tag_by_name("Biomes");
+
+	// return a zero biome value if no biomes exist
+	if(biome.empty())
+		return 0;
+
+	return static_cast<byte_array_tag *>(biome.at(0))->value.at(b_pos);
 }
 
 /*
  * Returns a chunk tag biomes at a given x, z coord
  */
 std::vector<int8_t> region_file_reader::get_biomes_at(unsigned int x, unsigned int z) {
+	std::vector<generic_tag *> biome;
+	std::vector<int8_t> biomes;
 	unsigned int pos = varify_coord(x, z, region_dim::REGION_X, region_dim::REGION_AREA);
 
 	// retrieve chunk data if it is not cached
 	cache_coord(x, z, pos);
-	return static_cast<byte_array_tag *>(data[pos].get_tag_by_name("Biomes").at(0))->value;
+	biome = data[pos].get_tag_by_name("Biomes");
+
+	// return an empty biome vector if no biomes exist
+	if(biome.empty())
+		return biomes;
+
+	return static_cast<byte_array_tag *>(biome.at(0))->value;
 }
 
 /*
  * Returns a chunk tag height value at a given x, z & b coord
  */
 int32_t region_file_reader::get_height_at(unsigned int x, unsigned int z, unsigned int b_x, unsigned int b_z) {
+	std::vector<generic_tag *> heights;
 	unsigned int pos = varify_coord(x, z, region_dim::REGION_X, region_dim::REGION_AREA),
 			b_pos = varify_coord(b_x, b_z, region_dim::CHUNK_X, region_dim::CHUNK_AREA);
 
 	// retrieve chunk data if it is not cached
 	cache_coord(x, z, pos);
-	return static_cast<int_array_tag *>(data[pos].get_tag_by_name("HeightMap").at(0))->value.at(b_pos);
+	heights = data[pos].get_tag_by_name("HeightMap");
+
+	// return a zero height value if no heightmap exists
+	if(heights.empty())
+		return 0;
+
+	return static_cast<int_array_tag *>(heights.at(0))->value.at(b_pos);
 }
 
 /*
  * Returns a chunk tag height map at a given x, z coord
  */
 std::vector<int32_t> region_file_reader::get_heightmap_at(unsigned int x, unsigned int z) {
+	std::vector<int32_t> height_blocks;
+	std::vector<generic_tag *> heights;
 	unsigned int pos = varify_coord(x, z, region_dim::REGION_X, region_dim::REGION_AREA);
 
 	// retrieve chunk data if it is not cached
 	cache_coord(x, z, pos);
-	return static_cast<int_array_tag *>(data[pos].get_tag_by_name("HeightMap").at(0))->value;
+	heights = data[pos].get_tag_by_name("HeightMap");
+
+	// return an empty heightmap vector if no heightmap exists
+	if(heights.empty())
+		return height_blocks;
+
+	return static_cast<int_array_tag *>(heights.at(0))->value;
 }
 
 /*
@@ -179,6 +209,10 @@ int32_t region_file_reader::get_block_at(unsigned int x, unsigned int z, unsigne
 	cache_coord(x, z, pos);
 	section = data[pos].get_tag_by_name("Blocks");
 
+	// return an air block if no blocks exists in a given chunk
+	if(section.empty())
+		return 0;
+
 	// check if y coord exists in file
 	if((sect = b_y / region_dim::SECTION_Y) >= section.size())
 		return 0;
@@ -186,7 +220,7 @@ int32_t region_file_reader::get_block_at(unsigned int x, unsigned int z, unsigne
 	// retrieve block from the appropriate section
 	sect_blocks = static_cast<byte_array_tag *>(section.at(sect))->value;
 
-	// TODO: check for "AddBLock" tag and apply to block id
+	// TODO: check for "AddBlock" tag and apply to block id
 
 	return sect_blocks.at(((b_y % 16) * 16 + b_z) * 16 + b_x);
 }
@@ -203,12 +237,18 @@ std::vector<int32_t> region_file_reader::get_blocks_at(unsigned int x, unsigned 
 	// retrieve chunk data if it is not cached
 	cache_coord(x, z, pos);
 	section = data[pos].get_tag_by_name("Blocks");
+
+	// return an empty vector if no blocks exists in a given chunk
+	if(section.empty())
+		return all_blocks;
+
+	// iterate through a series of sections combining the blocks
 	for(int i = section.size() - 1; i >= 0; --i) {
 			sect_blocks = static_cast<byte_array_tag *>(section.at(i))->value;
 			all_blocks.insert(all_blocks.begin(), sect_blocks.begin(), sect_blocks.end());
 	}
 
-	// TODO: check for "AddBLock" tag and apply to block ids
+	// TODO: check for "AddBlock" tag and apply to block ids
 
 	return all_blocks;
 }

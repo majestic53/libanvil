@@ -58,16 +58,7 @@ region_file::region_file(const std::string &path) : filled(0), path(path), x(0),
 		throw region_file_exc(region_file_exc::ALLOC_FAIL);
 
 	// parse the filename for coordinants
-	boost::cmatch ref;
-	std::stringstream stream;
-	std::string name = path.substr(path.find_last_of('/') + 1);
-	if(boost::regex_match(name.c_str(), ref, PATTERN)) {
-		stream << ref[1];
-		stream >> z;
-		stream.clear();
-		stream << ref[2];
-		stream >> x;
-	} else
+	if(!is_region_file(path, x, z))
 		throw region_file_exc(region_file_exc::INVALID_PATH, path);
 
 	// retrieve region file information
@@ -277,6 +268,25 @@ void region_file::inflate_zlib(std::vector<int8_t> &in, std::vector<int8_t> &out
 
 	// end inflation
 	inflateEnd(&str);
+}
+
+/*
+ * Returns true if a specified path is a region file
+ */
+bool region_file::is_region_file(const std::string &path, int &x, int &z) {
+
+	// parse the filename for coordinants
+	boost::cmatch ref;
+	std::stringstream stream;
+	std::string name = path.substr(path.find_last_of('/') + 1);
+	if(!boost::regex_match(name.c_str(), ref, PATTERN))
+		return false;
+	stream << ref[1];
+	stream >> z;
+	stream.clear();
+	stream << ref[2];
+	stream >> x;
+	return true;
 }
 
 /*
