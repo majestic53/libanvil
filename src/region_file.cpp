@@ -282,10 +282,10 @@ bool region_file::is_region_file(const std::string &path, int &x, int &z) {
 	if(!boost::regex_match(name.c_str(), ref, PATTERN))
 		return false;
 	stream << ref[1];
-	stream >> z;
+	stream >> x;
 	stream.clear();
 	stream << ref[2];
-	stream >> x;
+	stream >> z;
 	return true;
 }
 
