@@ -1,4 +1,104 @@
-libanvil is a C++ library for reading/writing Minecraft "Anvil" files
+libanvil is a C++ library for reading Minecraft "Anvil" files
+
+Dev Note
+-------
+Ok, so this is a buggy first release. The only informations on "Anvil" at the moment is a single, sparse wiki page.
+That being said, as more information becomes available, I will update my code appropriatly. If you encounter any
+bugs please report them, and I will do my best to fix them as soon as possible.
+
+What It Can Do
+-------
+	- Open Minecraft "Anvil" map files (.mca)
+	- Retrieve various bits of data (per chunk):
+		* Biome data at a given x, z coord
+		* HeightMap data at a given x, z coord
+		* Block data at a given x, y, z coord
+		* (or any tag with a known name)
+
+What It Can't Do (at the moment)
+-------
+	- Read extended block ids (ie. those blocks that use the "AddBLocks" tag)
+		* This will be fixed soon, once more information becomes available!
+	- Create/Write .mca files
+
+Usage
+-------
+
+The easiest way to access block/heightmap data for each chunk is to
+use the region_file_reader object. No cleanup is necessary. All 
+allocations/deallocations are handled internally within the reader.
+
+To instantiate a region_file_reader object, either:
+
+	region_file_reader reader;
+	reader = region_file_reader("path-to-region-file");
+
+or
+
+	region_file_reader reader("path-to-region-file");
+
+To read in block/heightmap data:
+
+	std::vector<int32_t> blocks, heights;
+
+	...
+
+	blocks = reader.get_blocks_at(x, z);
+	heights = reader.get_heightmap_at(x, z);
+
+Parsing block/heightmap data:
+
+	Data is stored in the chunks from the top-left to bottom right, and all coord are relative to
+	the chunk itself.
+
+	Block {x, y, z} = (y * 16 + z) * 16 + x
+	HeightMap {x, z} = x + z * 16
+
+Putting it all together:
+
+#include <cstdint>
+#include <iostream>
+#include <vector>
+#include "region_file_exc.hpp"
+#include "region_file_reader.hpp"
+
+int main(int argc, char *argv[]) {
+
+	// instantiate a file reader
+	region_file_reader reader;
+
+	// create vectors to hold block/height data (int32_t == int)
+	std::vector<int32_t> blocks, heights;
+
+	try {
+
+		// open a region file
+		reader = region_file_reader("path-to-region-file");
+
+		// iterate through all possible chunks within a region
+		for(unsigned int z = 0; z < 32; ++z)
+			for(unsigned int x = 0; x < 32; ++x) {
+
+				// this keeps an exception from being thrown
+				// when a non-existant chunk is requested
+				if(!reader.is_filled(x, z))
+					continue;
+
+				// if everything goes well, retrieve the block/height data
+				blocks = reader.get_blocks_at(x, z);
+				heights = reader.get_heightmap_at(x, z);
+
+				// ...
+			}
+
+
+	// catch all exception that may occur
+	} catch(region_file_exc &exc) {
+		std::cerr << exc.to_string() << std::endl;
+		return exc.get_exception();
+	}
+	return 0;
+}
 
 License
 -------

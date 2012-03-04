@@ -20,11 +20,11 @@
 #ifndef REGION_FILE_HPP_
 #define REGION_FILE_HPP_
 
-#include <boost/regex.hpp>
 #include <cstdint>
 #include <fstream>
 #include <string>
 #include <vector>
+#include <boost/regex.hpp>
 #include "byte_stream.hpp"
 #include "region_chunk_info.hpp"
 #include "region_chunk_tag.hpp"
@@ -144,19 +144,9 @@ private:
 public:
 
 	/*
-	 * Region file chunk count
-	 */
-	static const unsigned int CHUNK_COUNT = 1024;
-
-	/*
 	 * Region file pattern
 	 */
 	static const boost::regex PATTERN;
-
-	/*
-	 * Region size
-	 */
-	static const unsigned int REGION_SIZE = 32;
 
 	/*
 	 * Region file sector size
@@ -181,7 +171,7 @@ public:
 	/*
 	 * Region file destructor
 	 */
-	virtual ~region_file(void) { delete[] info; }
+	virtual ~region_file(void);
 
 	/*
 	 * Region file assignment

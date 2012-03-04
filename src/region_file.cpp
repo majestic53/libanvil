@@ -19,6 +19,7 @@
 
 #include <sstream>
 #include <zlib.h>
+#include "region_dim.hpp"
 #include "region_file.hpp"
 
 /*
@@ -30,7 +31,7 @@ const boost::regex region_file::PATTERN = boost::regex("r\\.([-]?[0-9]+)\\.([-]?
  * Region file constructor
  */
 region_file::region_file(void) : filled(0), x(0), z(0) {
-	info = new region_chunk_info[CHUNK_COUNT];
+	info = new region_chunk_info[region_dim::REGION_AREA];
 	if(!info)
 		throw region_file_exc(region_file_exc::ALLOC_FAIL);
 }
@@ -39,12 +40,12 @@ region_file::region_file(void) : filled(0), x(0), z(0) {
  * Region file constructor
  */
 region_file::region_file(const region_file &other) : filled(other.filled), path(other.path), x(other.x), z(other.z) {
-	info = new region_chunk_info[CHUNK_COUNT];
+	info = new region_chunk_info[region_dim::REGION_AREA];
 	if(!info)
 		throw region_file_exc(region_file_exc::ALLOC_FAIL);
 
 	// assign all attributes
-	for(unsigned int i = 0; i < CHUNK_COUNT; ++i)
+	for(unsigned int i = 0; i < region_dim::REGION_AREA; ++i)
 		info[i] = other.info[i];
 }
 
@@ -52,7 +53,7 @@ region_file::region_file(const region_file &other) : filled(other.filled), path(
  * Region file constructor
  */
 region_file::region_file(const std::string &path) : filled(0), path(path), x(0), z(0) {
-	info = new region_chunk_info[CHUNK_COUNT];
+	info = new region_chunk_info[region_dim::REGION_AREA];
 	if(!info)
 		throw region_file_exc(region_file_exc::ALLOC_FAIL);
 
@@ -74,6 +75,14 @@ region_file::region_file(const std::string &path) : filled(0), path(path), x(0),
 }
 
 /*
+ * Region file destructor
+ */
+region_file::~region_file(void) {
+	delete[] info;
+	file.close();
+}
+
+/*
  * Region file assignment
  */
 region_file &region_file::operator=(const region_file &other) {
@@ -89,10 +98,10 @@ region_file &region_file::operator=(const region_file &other) {
 	x = other.x;
 	z = other.z;
 	delete[] info;
-	info = new region_chunk_info[CHUNK_COUNT];
+	info = new region_chunk_info[region_dim::REGION_AREA];
 	if(!info)
 		throw region_file_exc(region_file_exc::ALLOC_FAIL);
-	for(unsigned int i = 0; i < CHUNK_COUNT; ++i)
+	for(unsigned int i = 0; i < region_dim::REGION_AREA; ++i)
 		info[i] = other.info[i];
 	return *this;
 }
@@ -112,7 +121,7 @@ bool region_file::operator==(const region_file &other) {
 			|| x != other.x
 			|| z != other.z)
 		return false;
-	for(unsigned int i = 0; i < CHUNK_COUNT; ++i)
+	for(unsigned int i = 0; i < region_dim::REGION_AREA; ++i)
 		if(info[i] != other.info[i])
 			return false;
 	return true;
@@ -122,10 +131,10 @@ bool region_file::operator==(const region_file &other) {
  * Returnd region chunk data at a given x, z coord
  */
 void region_file::get_chunk_data(unsigned int x, unsigned int z, std::vector<int8_t> &data) {
-	unsigned int pos = x + z * REGION_SIZE;
+	unsigned int pos = x + z * region_dim::REGION_Z;
 
 	// check if x, z coord are out-of-bounds
-	if(pos >= CHUNK_COUNT) {
+	if(pos >= region_dim::REGION_AREA) {
 		unsigned int coord[] = {x, z};
 		std::vector<unsigned int> coord_vec(coord, coord + 2);
 		throw region_file_exc(region_file_exc::OUT_OF_BOUNDS, coord_vec);
@@ -139,7 +148,7 @@ void region_file::get_chunk_data(unsigned int x, unsigned int z, std::vector<int
 	}
 
 	// gather chunk info
-	region_chunk_info chunk_info = info[x + z * REGION_SIZE];
+	region_chunk_info chunk_info = info[x + z * region_dim::REGION_Z];
 	int comp_size = chunk_info.get_size();
 
 	// check if chunk is empty
@@ -185,14 +194,14 @@ void region_file::get_chunk_data(unsigned int x, unsigned int z, std::vector<int
 void region_file::get_chunk_info(unsigned int x, unsigned int z, region_chunk_info &info) {
 
 	// check if x, z coord are out-of-bounds
-	if(x + z * REGION_SIZE >= CHUNK_COUNT) {
+	if(x + z * region_dim::REGION_Z >= region_dim::REGION_AREA) {
 		unsigned int coord[] = {x, z};
 		std::vector<unsigned int> coord_vec(coord, coord + 2);
 		throw region_file_exc(region_file_exc::OUT_OF_BOUNDS, coord_vec);
 	}
 
 	// assign chunk info
-	info = region_chunk_info(this->info[x + z * REGION_SIZE]);
+	info = region_chunk_info(this->info[x + z * region_dim::REGION_Z]);
 }
 
 /*
@@ -274,8 +283,8 @@ void region_file::inflate_zlib(std::vector<int8_t> &in, std::vector<int8_t> &out
  * Reads in a series of region chunks from a given path
  */
 void region_file::read(const std::string &path) {
-	int pos[CHUNK_COUNT];
-	int time[CHUNK_COUNT];
+	int pos[region_dim::REGION_AREA];
+	int time[region_dim::REGION_AREA];
 
 	// open file at path
 	file.open(path.c_str(), std::ios::in | std::ios::binary);
@@ -285,7 +294,7 @@ void region_file::read(const std::string &path) {
 		throw region_file_exc(region_file_exc::INVALID_PATH, path);
 
 	// read in chunk positions & convert to little-endian
-	for(unsigned int i = 0; i < CHUNK_COUNT; ++i) {
+	for(unsigned int i = 0; i < region_dim::REGION_AREA; ++i) {
 		file.read(reinterpret_cast<char *>(&pos[i]), sizeof(int));
 		convert_endian(pos[i]);
 
@@ -295,13 +304,13 @@ void region_file::read(const std::string &path) {
 	}
 
 	// read in chunk timestamps & covert to little-endian
-	for(unsigned int i = 0; i < CHUNK_COUNT; ++i) {
+	for(unsigned int i = 0; i < region_dim::REGION_AREA; ++i) {
 		file.read(reinterpret_cast<char *>(&time[i]), sizeof(int));
 		convert_endian(time[i]);
 	}
 
 	// add chunks to array
-	for(unsigned int i = 0; i < CHUNK_COUNT; i++) {
+	for(unsigned int i = 0; i < region_dim::REGION_AREA; i++) {
 		int size = 0;
 		char comp_type = 0;
 		region_chunk_info chunk_info;
@@ -470,6 +479,6 @@ std::string region_file::to_string(void) {
 	std::stringstream ss;
 
 	// form string representation
-	ss << "[REGION] (" << x << ", " << z << "), filled: " << filled << "/" << CHUNK_COUNT << ", path: " << path;
+	ss << "[REGION] (" << x << ", " << z << "), filled: " << filled << "/" << region_dim::REGION_AREA << ", path: " << path;
 	return ss.str();
 }
