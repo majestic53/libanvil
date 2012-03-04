@@ -62,8 +62,10 @@ region_file_reader::region_file_reader(const std::string &path) {
 		for(unsigned int x = 0; x < region_dim::REGION_X; ++x) {
 			pos = z * region_dim::REGION_Z + x;
 			file.get_chunk_info(x, z, info);
-			if(!info.get_position())
+			if(!info.get_position()) {
+				fill[pos] = false;
 				continue;
+			}
 			fill[pos] = true;
 			fill_count++;
 		}
@@ -271,7 +273,7 @@ std::string region_file_reader::to_string(void) {
 	std::stringstream ss;
 
 	// form string representation
-	ss << "[READER] filled: " << fill_count << "/" << region_dim::REGION_AREA;
+	ss << "filled: " << fill_count << "/" << region_dim::REGION_AREA;
 	if(!file.get_path().empty())
 		ss << ", path: " << file.get_path();
 	return ss.str();

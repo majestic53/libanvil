@@ -144,6 +144,16 @@ public:
 	unsigned int get_fill_count(void) { return fill_count; }
 
 	/*
+	 * Returns a region x coord
+	 */
+	int get_x_coord(void) { return file.get_region_x_coord(); }
+
+	/*
+	 * Returns a region z coord
+	 */
+	int get_z_coord(void) { return file.get_region_z_coord(); }
+
+	/*
 	 * Returns fill status at a given x, z coord
 	 */
 	bool is_filled(unsigned int x, unsigned int z) { return fill[varify_coord(x, z, region_dim::REGION_X, region_dim::REGION_AREA)]; }
