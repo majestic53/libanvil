@@ -17,7 +17,7 @@ What It Can Do
 
 What It Can't Do (at the moment)
 -------
-	- Read extended block ids (ie. those blocks that use the "AddBLocks" tag)
+	- Read extended block ids (ie. those blocks that use the "AddBlocks" tag)
 		* This will be fixed soon, once more information becomes available!
 	- Create/Write .mca files
 
