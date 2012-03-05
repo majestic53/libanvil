@@ -21,6 +21,26 @@ What It Can't Do (at the moment)
 		* This will be fixed soon, once more information becomes available!
 	- Create/Write .mca files
 
+Building
+-------
+
+Instructions for compiling libanvil from source code
+
+Requirements (tested on):
+	- g++ 4.4.3 or newer
+	- make 3.8 or newer
+	- boost regex 1.42 or newer
+	- zlib 1.2.3.3 or newer
+
+For Debian:
+	- sudo apt-get install build-essential make zlib-dev libboost1.42-all-dev
+
+Building (produces a static lib):
+	- make
+
+To use static library:
+	- g++ -o <EXECUTABLE NAME> <MAIN>.cpp -std=c++0x -lboost_regex -lz -I <PATH_TO_LIBNBT> -L <PATH_TO_LIBNBT> -lanvil
+
 Usage
 -------
 
