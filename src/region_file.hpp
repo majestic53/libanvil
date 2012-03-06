@@ -54,7 +54,7 @@ private:
 	/*
 	 * Array of chunk files
 	 */
-	region_chunk_info *info;
+	region_chunk_info info[region_dim::REGION_AREA];
 
 	/*
 	 * Region file
@@ -156,7 +156,7 @@ public:
 	/*
 	 * Region file constructor
 	 */
-	region_file(void);
+	region_file(void) : filled(0), x(0), z(0) { return; }
 
 	/*
 	 * Region file constructor
@@ -171,7 +171,7 @@ public:
 	/*
 	 * Region file destructor
 	 */
-	virtual ~region_file(void);
+	virtual ~region_file(void) { file.close(); }
 
 	/*
 	 * Region file assignment

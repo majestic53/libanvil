@@ -30,19 +30,7 @@ const boost::regex region_file::PATTERN = boost::regex("r\\.([-]?[0-9]+)\\.([-]?
 /*
  * Region file constructor
  */
-region_file::region_file(void) : filled(0), x(0), z(0) {
-	info = new region_chunk_info[region_dim::REGION_AREA];
-	if(!info)
-		throw region_file_exc(region_file_exc::ALLOC_FAIL);
-}
-
-/*
- * Region file constructor
- */
 region_file::region_file(const region_file &other) : filled(other.filled), path(other.path), x(other.x), z(other.z) {
-	info = new region_chunk_info[region_dim::REGION_AREA];
-	if(!info)
-		throw region_file_exc(region_file_exc::ALLOC_FAIL);
 
 	// assign all attributes
 	for(unsigned int i = 0; i < region_dim::REGION_AREA; ++i)
@@ -53,9 +41,6 @@ region_file::region_file(const region_file &other) : filled(other.filled), path(
  * Region file constructor
  */
 region_file::region_file(const std::string &path) : filled(0), path(path), x(0), z(0) {
-	info = new region_chunk_info[region_dim::REGION_AREA];
-	if(!info)
-		throw region_file_exc(region_file_exc::ALLOC_FAIL);
 
 	// parse the filename for coordinants
 	if(!is_region_file(path, x, z))
@@ -63,14 +48,6 @@ region_file::region_file(const std::string &path) : filled(0), path(path), x(0),
 
 	// retrieve region file information
 	read();
-}
-
-/*
- * Region file destructor
- */
-region_file::~region_file(void) {
-	delete[] info;
-	file.close();
 }
 
 /*
@@ -88,10 +65,6 @@ region_file &region_file::operator=(const region_file &other) {
 	path = other.path;
 	x = other.x;
 	z = other.z;
-	delete[] info;
-	info = new region_chunk_info[region_dim::REGION_AREA];
-	if(!info)
-		throw region_file_exc(region_file_exc::ALLOC_FAIL);
 	for(unsigned int i = 0; i < region_dim::REGION_AREA; ++i)
 		info[i] = other.info[i];
 	return *this;
