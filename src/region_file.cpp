@@ -389,66 +389,67 @@ generic_tag *region_file::read_tag(const std::string &name, unsigned int type, b
 
 	// create tag
 	generic_tag *tag = NULL;
-	int8_t b_val;
-	int16_t s_val;
-	int32_t i_val;
-	int64_t l_val;
-	float f_val;
-	double d_val;
-	std::string str_val;
-	std::vector<int8_t> b_vec;
-	std::vector<int32_t> i_vec;
-	std::vector<generic_tag *> gen_vec;
 
 	// assign tag based off type
 	switch(type) {
-		case generic_tag::BYTE:
+		case generic_tag::BYTE: {
+			int8_t b_val;
 			read_number_value<int8_t>(stream, b_val);
 			tag = new byte_tag(name, b_val);
-			break;
-		case generic_tag::BYTE_ARRAY:
+		} break;
+		case generic_tag::BYTE_ARRAY: {
+			std::vector<int8_t> b_vec;
 			read_array_value<int8_t>(stream, b_vec);
 			tag = new byte_array_tag(name, b_vec);
-			break;
-		case generic_tag::COMPOUND:
+		} break;
+		case generic_tag::COMPOUND: {
+			std::vector<generic_tag *> gen_vec;
 			read_compound_value(stream, gen_vec);
 			tag = new compound_tag(name, gen_vec);
-			break;
-		case generic_tag::DOUBLE:
+		} break;
+		case generic_tag::DOUBLE: {
+			double d_val;
 			read_number_value<double>(stream, d_val);
 			tag = new double_tag(name, d_val);
-			break;
+		} break;
 		case generic_tag::END:
 			tag = new end_tag;
 			break;
-		case generic_tag::FLOAT:
+		case generic_tag::FLOAT: {
+			float f_val;
 			read_number_value<float>(stream, f_val);
 			tag = new float_tag(name, f_val);
-			break;
-		case generic_tag::INT:
+		} break;
+		case generic_tag::INT: {
+			int32_t i_val;
 			read_number_value<int32_t>(stream, i_val);
 			tag = new int_tag(name, i_val);
-			break;
-		case generic_tag::INT_ARRAY:
+		} break;
+		case generic_tag::INT_ARRAY: {
+			std::vector<int32_t> i_vec;
 			read_array_value<int32_t>(stream, i_vec);
 			tag = new int_array_tag(name, i_vec);
-			break;
-		case generic_tag::LIST:
+		} break;
+		case generic_tag::LIST: {
+			std::vector<generic_tag *> gen_vec;
 			read_list_value(stream, gen_vec);
 			tag = new list_tag(name, gen_vec);
-			break;
-		case generic_tag::LONG:
+		} break;
+		case generic_tag::LONG: {
+			int64_t l_val;
 			read_number_value<int64_t>(stream, l_val);
 			tag = new long_tag(name, l_val);
-			break;
-		case generic_tag::SHORT:
+		} break;
+		case generic_tag::SHORT: {
+			int16_t s_val;
 			read_number_value<int16_t>(stream, s_val);
 			tag = new short_tag(name, s_val);
-			break;
-		case generic_tag::STRING:
+		} break;
+		case generic_tag::STRING: {
+			std::string str_val;
 			read_string_value(stream, str_val);
 			tag = new string_tag(name, str_val);
-			break;
+		} break;
 		default:
 			throw region_file_exc(region_file_exc::UNKNOWN_TAG_TYPE, type);
 	}
