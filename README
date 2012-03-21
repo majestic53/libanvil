@@ -1,4 +1,4 @@
-libanvil is a C++ library for reading Minecraft "Anvil" files
+libanvil is a C++ library for reading and writing Minecraft "Anvil" files
 
 Dev Note
 -------
