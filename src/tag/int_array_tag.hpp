@@ -20,87 +20,109 @@
 #ifndef INT_ARRAY_TAG_HPP_
 #define INT_ARRAY_TAG_HPP_
 
-#include <cstdint>
+#include <string>
 #include <vector>
 #include "generic_tag.hpp"
 
 class int_array_tag : public generic_tag {
+private:
+
+	/*
+	 * Integer array tag value
+	 */
+	std::vector<int> value;
+
 public:
 
 	/*
-	 * Int array tag value
-	 */
-	std::vector<int32_t> value;
-
-	/*
-	 * Byte array tag constructor
+	 * Integer array tag constructor
 	 */
 	int_array_tag(void) : generic_tag(INT_ARRAY) { return; }
 
 	/*
-	 * Int array tag constructor
+	 * Integer array tag constructor
 	 */
-	int_array_tag(const int_array_tag &other) : generic_tag(other.name, INT_ARRAY), value(other.value) { return; }
+	int_array_tag(const int_array_tag &other) : generic_tag(other.name, INT_ARRAY) { value = other.value; };
 
 	/*
-	 * Int array tag constructor
+	 * Integer array tag constructor
 	 */
-	int_array_tag(std::vector<int32_t> value) : generic_tag(INT_ARRAY), value(value) { return; }
+	int_array_tag(std::vector<int> value) : generic_tag(INT_ARRAY) { this->value = value; }
 
 	/*
-	 * Int array tag constructor
+	 * Integer array tag constructor
 	 */
-	int_array_tag(const std::string &name, std::vector<int32_t> &value) : generic_tag(name, INT_ARRAY), value(value) { return; }
+	int_array_tag(const std::string &name, std::vector<int> value) : generic_tag(name, INT_ARRAY) { this->value = value; }
 
 	/*
-	 * Int array tag destructor
+	 * Integer array tag destructor
 	 */
-	~int_array_tag(void) { value.clear(); }
+	virtual ~int_array_tag(void) { return; }
 
 	/*
-	 * Int array tag assignment
+	 * Integer array tag assignment operator
 	 */
 	int_array_tag &operator=(const int_array_tag &other);
 
 	/*
-	 * Int array tag equals
+	 * Integer array tag equals operator
 	 */
-	bool operator==(const int_array_tag &other);
+	bool operator==(const generic_tag &other);
 
 	/*
-	 * Int array tag not equals
+	 * Integer array tag not-equals operator
 	 */
-	bool operator!=(const int_array_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Add a int to a int array tag
+	 * Returns a integer array tag integer at a given index
 	 */
-	void add(int32_t val) { value.push_back(val); }
+	int &at(unsigned int index) { return value.at(index); }
 
 	/*
-	 * Returns an int value at a given index in a int array tag
-	 */
-	int32_t at(unsigned int index);
-
-	/*
-	 * Returns the empty status of a int array tag
+	 * Returns a integer array tag's empty status
 	 */
 	bool empty(void) { return value.empty(); }
 
 	/*
-	 * Returns an int array tags value
+	 * Erase a integer in a integer array tag at a given index
 	 */
-	void *get_value(void) { return &value; }
+	void erase(unsigned int index) { value.erase(value.begin() + index); }
 
 	/*
-	 * Returns the size of an int array tag
+	 * Return a integer array tag's data
+	 */
+	std::vector<char> get_data(void);
+
+	/*
+	 * Return a integer array tag's value
+	 */
+	std::vector<int> &get_value(void) { return value; }
+
+	/*
+	 * Insert a integer into a integer array tag at a given index
+	 */
+	void insert(int value, unsigned int index) { this->value.insert(this->value.begin() + index, value); }
+
+	/*
+	 * Insert a integer onto the tail of a integer array tag
+	 */
+	void push_back(int value) { this->value.push_back(value); }
+
+	/*
+	 * Set a integer array tag's value
+	 */
+	void set_value(std::vector<int> &value) { this->value = value; }
+
+	/*
+	 * Returns a integer array tag value's size
 	 */
 	unsigned int size(void) { return value.size(); }
 
 	/*
-	 * Returns a string representation of a int array tag
+	 * Return a string representation of a integer array tag
 	 */
-	std::string to_string(void);
+	std::string to_string(unsigned int tab);
 };
 
 #endif

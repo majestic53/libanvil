@@ -1,5 +1,5 @@
 /*
- * region_file_exc.cpp
+ * chunk_info.cpp
  * Copyright (C) 2012 David Jolly
  * ----------------------
  *
@@ -17,61 +17,58 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "region_file_exc.hpp"
+#include <sstream>
+#include "chunk_info.hpp"
 
 /*
- * Exception messages
+ * Chunk info assignment operator
  */
-const std::string region_file_exc::MESSAGE[MESSAGE_COUNT] = {
-		"Undefined exception",
-		"Failed to allocate memory",
-		"Invalid path",
-		"Coord out of range",
-		"Unsupported compression",
-		"Unknown compression",
-		"Unknown tag type",
-		"Stream read error",
-		"Attempt to read unfilled chunk",
-};
-
-/*
- * Region file exception assignment
- */
-region_file_exc &region_file_exc::operator=(const region_file_exc &other) {
+chunk_info &chunk_info::operator=(const chunk_info &other) {
 
 	// check for self
 	if(this == &other)
 		return *this;
 
-	// set attributes
-	exc = other.exc;
-	message = other.message;
+	// assign attributes
+	length = other.length;
+	modified = other.modified;
+	offset = other.offset;
+	type = other.type;
 	return *this;
 }
 
 /*
- * Region file exception equals
+ * Chunk info equals operator
  */
-bool region_file_exc::operator==(const region_file_exc &other) {
+bool chunk_info::operator==(const chunk_info &other) {
 
 	// check for self
 	if(this == &other)
 		return true;
 
 	// check attributes
-	return exc == other.exc
-			&& message == other.message;
+	return length == other.length
+			&& modified == other.modified
+			&& offset == other.offset
+			&& type == other.type;
 }
 
 /*
- * Returns a string representation of an exception
+ * Returns a string representation of a chunk
  */
-std::string region_file_exc::to_string(void) {
+std::string chunk_info::to_string(void) {
 	std::stringstream ss;
 
 	// form string representation
-	ss << "Exception[" << exc << "]: " << MESSAGE[exc];
-	if(!message.empty())
-		ss << ": " << message;
+	ss << "[";
+	switch(type) {
+		case GZIP: ss << "GZIP";
+			break;
+		case ZLIB: ss << "ZLIB";
+			break;
+		default: ss << "UNKNOWN";
+			break;
+	}
+	ss << "] off: " << offset << ", len: " << length << ", modified: " << modified;
 	return ss.str();
 }

@@ -20,7 +20,7 @@
 #include "end_tag.hpp"
 
 /*
- * End tag assignment
+ * End tag assignment operator
  */
 end_tag &end_tag::operator=(const end_tag &other) {
 
@@ -28,18 +28,38 @@ end_tag &end_tag::operator=(const end_tag &other) {
 	if(this == &other)
 		return *this;
 
-	// set attributes
-	generic_tag::operator =(other);
+	// assign attributes
+	name = other.name;
+	type = other.type;
 	return *this;
 }
 
 /*
- * Returns a string representation of an end tag
+ * End tag equals operator
  */
-std::string end_tag::to_string(void) {
-	std::string out;
+bool end_tag::operator==(const generic_tag &other) {
 
-	// create string representation
-	out.append(generic_tag::type_to_string(type));
-	return out;
+	// check for self
+	if(this == &other)
+		return true;
+
+	// convert into same type
+	const end_tag *other_tag = dynamic_cast<const end_tag *>(&other);
+	if(!other_tag)
+		return false;
+
+	// check attributes
+	return name == other.name
+			&& type == other.type;
+}
+
+/*
+ * Return a end tag's data
+ */
+std::vector<char> end_tag::get_data(void)  {
+	std::vector<char> data;
+
+	// form data representation
+	data.insert(data.end(), 0);
+	return data;
 }

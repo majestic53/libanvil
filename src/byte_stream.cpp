@@ -23,61 +23,19 @@
 /*
  * Byte stream constructor
  */
-byte_stream::byte_stream(void) {
-	len = 0;
+byte_stream::byte_stream(const std::string &buff) {
 	pos = 0;
-	buff = NULL;
+	for(unsigned int i = 0; i < buff.length(); ++i)
+		this->buff.push_back(buff.at(i));
 	swap = NO_SWAP_ENDIAN;
 }
 
 /*
  * Byte stream constructor
  */
-byte_stream::byte_stream(const byte_stream &other) {
-	len = other.len;
-	pos = other.pos;
-	buff = new int8_t[other.len];
-	if(!buff) {
-		len = 0;
-		pos = 0;
-		return;
-	}
-	for(unsigned int i = 0; i < len; ++i)
-		buff[i] = other.buff[i];
-	swap = other.swap;
-}
-
-/*
- * Byte stream constructor
- */
-byte_stream::byte_stream(const std::string &input) {
-	len = input.length();
+byte_stream::byte_stream(std::vector<char> &buff) {
 	pos = 0;
-	buff = new int8_t[input.length()];
-	if(!buff) {
-		len = 0;
-		pos = 0;
-		return;
-	}
-	for(unsigned int i = 0; i < len; ++i)
-		buff[i] = input[i];
-	swap = NO_SWAP_ENDIAN;
-}
-
-/*
- * Byte stream constructor
- */
-byte_stream::byte_stream(std::vector<int8_t> &input) {
-	len = input.size();
-	pos = 0;
-	buff = new int8_t[input.size()];
-	if(!buff) {
-		len = 0;
-		pos = 0;
-		return;
-	}
-	for(unsigned int i = 0; i < len; ++i)
-		buff[i] = input.at(i);
+	this->buff = buff;
 	swap = NO_SWAP_ENDIAN;
 }
 
@@ -91,16 +49,8 @@ byte_stream &byte_stream::operator=(const byte_stream &other) {
 		return *this;
 
 	// set attributes
-	len = other.len;
 	pos = other.pos;
-	buff = new int8_t[other.len];
-	if(!buff) {
-		len = 0;
-		pos = 0;
-		return *this;
-	}
-	for(unsigned int i = 0; i < len; ++i)
-		buff[i] = other.buff[i];
+	buff = other.buff;
 	swap = other.swap;
 	return *this;
 }
@@ -115,11 +65,10 @@ bool byte_stream::operator==(const byte_stream &other) {
 		return true;
 
 	// check attributes
-	if(len != other.len
-			|| pos != other.pos)
+	if(pos != other.pos)
 		return false;
-	for(unsigned int i = 0; i < len; ++i)
-		if(buff[i] != other.buff[i])
+	for(unsigned int i = 0; i < buff.size(); ++i)
+		if(buff.at(i) != other.buff.at(i))
 			return false;
 	return true;
 }
@@ -129,19 +78,9 @@ bool byte_stream::operator==(const byte_stream &other) {
  */
 bool byte_stream::operator<<(const std::string &input) {
 
-	// create new buffer
-	int8_t *n_buff = new int8_t[input.length()];
-	if(!n_buff)
-		return false;
-	for(unsigned int i = 0; i < input.length(); ++i)
-		n_buff[i] = input.at(i);
-
-	// set attributes
-	if(buff)
-		delete[] buff;
-	len = input.length();
-	pos = 0;
-	buff = n_buff;
+	// append to the end of the stream
+	for(unsigned int i = 0; i < input.size(); ++i)
+		buff.push_back(input.at(i));
 	return true;
 }
 
@@ -165,7 +104,7 @@ bool byte_stream::operator<<(int flag) {
 /*
  * Byte stream output
  */
-bool byte_stream::operator>>(int8_t &output) {
+bool byte_stream::operator>>(char &output) {
 
 	// check if end of stream is reached
 	if(available() == END_OF_STREAM)
@@ -179,7 +118,7 @@ bool byte_stream::operator>>(int8_t &output) {
 /*
  * Byte stream output
  */
-bool byte_stream::operator>>(int16_t &output) {
+bool byte_stream::operator>>(short &output) {
 
 	// check if end of stream is reached
 	if(available() == END_OF_STREAM)
@@ -192,7 +131,7 @@ bool byte_stream::operator>>(int16_t &output) {
 /*
  * Byte stream output
  */
-bool byte_stream::operator>>(int32_t &output) {
+bool byte_stream::operator>>(int &output) {
 
 	// check if end of stream is reached
 	if(available() == END_OF_STREAM)
@@ -205,7 +144,7 @@ bool byte_stream::operator>>(int32_t &output) {
 /*
  * Byte stream output
  */
-bool byte_stream::operator>>(int64_t &output) {
+bool byte_stream::operator>>(long &output) {
 
 	// check if end of stream is reached
 	if(available() == END_OF_STREAM)
@@ -245,10 +184,23 @@ bool byte_stream::operator>>(double &output) {
  * Returns the available bytes left in the stream
  */
 unsigned int byte_stream::available(void) {
-	unsigned int remaining = len - pos;
+	unsigned int remaining = buff.size() - pos;
 	if(remaining <= 0)
 		return END_OF_STREAM;
 	return remaining;
+}
+
+/*
+ * Convert between endian types
+ */
+void byte_stream::swap_endian(std::vector<char> &data) {
+	std::vector<char> rev;
+	rev.resize(data.size());
+
+	// reverse the order of elements
+	for(unsigned int i = 0; i < data.size(); ++i)
+		rev.at(rev.size() - i) = data.at(i);
+	data = rev;
 }
 
 /*
@@ -258,9 +210,9 @@ std::string byte_stream::to_string(void) {
 	std::stringstream ss;
 
 	// form string representation
-	ss << "[STREAM] " << (good() ? "ACTIVE" : "INACTIVE") << ", size: " << len << ", pos: " << pos;
+	ss << (good() ? "ACTIVE" : "INACTIVE") << ", size: " << buff.size() << ", pos: " << pos;
 	if(available())
-		ss << ", curr: " << buff[pos] << " (" << (int) buff[pos] << ")";
+		ss << ", curr: " << (int) buff[pos];
 	if(swap)
 		ss << " (SWAP ENDIAN)";
 	return ss.str();

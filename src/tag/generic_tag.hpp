@@ -20,20 +20,22 @@
 #ifndef GENERIC_TAG_HPP_
 #define GENERIC_TAG_HPP_
 
+#include <sstream>
 #include <string>
+#include <vector>
 
 class generic_tag {
 public:
 
 	/*
-	 * Tag name
+	 * Tag's name
 	 */
 	std::string name;
 
 	/*
-	 * Tag type
+	 * Tag's type
 	 */
-	char type;
+	unsigned char type;
 
 	/*
 	 * Supported tag types
@@ -43,7 +45,7 @@ public:
 	/*
 	 * Generic tag constructor
 	 */
-	generic_tag(void) : type(END) { return; }
+	generic_tag(void) : name(""), type(END) { return; }
 
 	/*
 	 * Generic tag constructor
@@ -53,12 +55,12 @@ public:
 	/*
 	 * Generic tag constructor
 	 */
-	generic_tag(char type) : type(END) { return; }
+	generic_tag(unsigned char type) : name(""), type(type) { return; }
 
 	/*
 	 * Generic tag constructor
 	 */
-	generic_tag(const std::string &name, char type) : name(name), type(type) { return; }
+	generic_tag(const std::string &name, unsigned char type) : name(name), type(type) { return; }
 
 	/*
 	 * Generic tag destructor
@@ -66,44 +68,59 @@ public:
 	virtual ~generic_tag(void) { return; }
 
 	/*
-	 * Generic tag assignment
+	 * Generic tag assignment operator
 	 */
 	generic_tag &operator=(const generic_tag &other);
 
 	/*
-	 * Generic tag equals
+	 * Generic tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	virtual bool operator==(const generic_tag &other);
 
 	/*
-	 * Generic tag not equals
+	 * Generic tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	virtual bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Returns a generic tags name
+	 * Append a certain number of tabs to a given stringstream
+	 */
+	static void append_tabs(unsigned int tab, std::stringstream &ss);
+
+	/*
+	 * Return a generic tag's data
+	 */
+	virtual std::vector<char> get_data(void) { return this->get_data(); }
+
+	/*
+	 * Return a generic tag's name
 	 */
 	std::string get_name(void) { return name; }
 
 	/*
-	 * Returns a generic tags type
+	 * Return a generic tag's type
 	 */
-	char get_type(void) { return type; }
+	unsigned char get_type(void) { return type; }
 
 	/*
-	 * Returns a generic tags value;
+	 * Set a generic tag's name
 	 */
-	virtual void *get_value(void) { return this->get_value(); }
+	void set_name(const std::string &name) { this->name = name; }
 
 	/*
-	 * Returns a string representation of a generic tag
+	 * Set a generic tag's type
 	 */
-	virtual std::string to_string(void);
+	void set_type(unsigned char type) { this->type = type; }
 
 	/*
-	 * Returns a string representatrion of a tag type
+	 * Return a string representation of a generic tag
 	 */
-	static std::string type_to_string(char type);
+	virtual std::string to_string(unsigned int tab);
+
+	/*
+	 * Return a string representation of a tag type
+	 */
+	static std::string type_to_string(unsigned char type);
 };
 
 #endif

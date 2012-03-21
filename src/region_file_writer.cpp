@@ -1,5 +1,5 @@
 /*
- * region_dim.hpp
+ * region_file_writer.cpp
  * Copyright (C) 2012 David Jolly
  * ----------------------
  *
@@ -17,41 +17,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REGION_DIM_HPP_
-#define REGION_DIM_HPP_
+#include <sstream>
+#include "region_file_writer.hpp"
 
-class region_dim {
-public:
+/*
+ * Region file writer assignment operator
+ */
+region_file_writer &region_file_writer::operator=(const region_file_writer &other) {
 
-	/*
-	 * Maximum number of surface blocks per chunk
-	 */
-	static const unsigned int BLOCK_COUNT = 256;
+	// check for self
+	if(this == &other)
+		return *this;
 
-	/*
-	 * Block width of a chunk
-	 */
-	static const unsigned int BLOCK_WIDTH = 16;
+	// assign attributes
+	path = other.path;
+	reg = other.reg;
+	return *this;
+}
 
-	/*
-	 * Block height of a chunk
-	 */
-	static const unsigned int BLOCK_HEIGHT = 256;
+/*
+ * Region file writer equals operator
+ */
+bool region_file_writer::operator==(const region_file_writer &other) {
 
-	/*
-	 * Maximum number of chunks in region
-	 */
-	static const unsigned int CHUNK_COUNT = 1024;
+	// check for self
+	if(this == &other)
+		return true;
 
-	/*
-	 * Chunk width of a region
-	 */
-	static const unsigned int CHUNK_WIDTH = 32;
+	// check attributes
+	return path == other.path
+			&& reg == other.reg;
+}
 
-	/*
-	 * Region file sector size
-	 */
-	static const unsigned int SECTOR_SIZE = 4096;
-};
+/*
+ * Write a region file to file
+ */
+void region_file_writer::write(void) {
 
-#endif
+	// TODO: write to file
+
+}

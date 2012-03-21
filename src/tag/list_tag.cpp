@@ -18,21 +18,10 @@
  */
 
 #include <sstream>
-#include "byte_array_tag.hpp"
-#include "byte_tag.hpp"
-#include "compound_tag.hpp"
-#include "double_tag.hpp"
-#include "end_tag.hpp"
-#include "float_tag.hpp"
-#include "generic_tag.hpp"
-#include "int_tag.hpp"
 #include "list_tag.hpp"
-#include "long_tag.hpp"
-#include "short_tag.hpp"
-#include "string_tag.hpp"
 
 /*
- * List tag assignment
+ * List tag assignment operator
  */
 list_tag &list_tag::operator=(const list_tag &other) {
 
@@ -40,105 +29,105 @@ list_tag &list_tag::operator=(const list_tag &other) {
 	if(this == &other)
 		return *this;
 
-	// set attributes
-	generic_tag::operator =(other);
-	value.assign(other.value.begin(), other.value.end());
+	// assign attributes
+	name = other.name;
+	type = other.type;
+	value = other.value;
 	return *this;
 }
 
 /*
- * List tag equals
+ * List tag equals operator
  */
-bool list_tag::operator==(const list_tag &other) {
+bool list_tag::operator==(const generic_tag &other) {
 
 	// check for self
 	if(this == &other)
 		return true;
 
-	// check attributes
-	if(generic_tag::operator !=(other)
-			|| value.size() != other.value.size())
+	// convert into same type
+	const list_tag *other_tag = dynamic_cast<const list_tag *>(&other);
+	if(!other_tag)
 		return false;
-	for(unsigned int i = 0; i < value.size(); ++i) {
-		if(value.at(i)->get_type() != other.value.at(i)->get_type())
+
+	// check attributes
+	if(name != other.name
+			|| type != other.type
+			|| value.size() != other_tag->value.size())
+		return false;
+	for(unsigned int i = 0; i < value.size(); ++i)
+		if(value.at(i) != other_tag->value.at(i))
 			return false;
-		switch(value.at(i)->get_type()) {
-			case generic_tag::COMPOUND:
-				if((compound_tag) *static_cast<compound_tag *>(value.at(i)) != *static_cast<compound_tag *>(other.value.at(i)))
-					return false;
-				break;
-			case generic_tag::LIST:
-				if(*static_cast<list_tag *>(value.at(i)) != *static_cast<list_tag *>(other.value.at(i)))
-					return false;
-				break;
-			case generic_tag::BYTE_ARRAY:
-				if(*static_cast<byte_array_tag *>(value.at(i)) != *static_cast<byte_array_tag *>(other.value.at(i)))
-					return false;
-				break;
-			case generic_tag::BYTE:
-				if(*static_cast<byte_tag *>(value.at(i)) != *static_cast<byte_tag *>(other.value.at(i)))
-					return false;
-				break;
-			case generic_tag::DOUBLE:
-				if(*static_cast<double_tag *>(value.at(i)) != *static_cast<double_tag *>(other.value.at(i)))
-					return false;
-				break;
-			case generic_tag::END:
-				if(*static_cast<end_tag *>(value.at(i)) != *static_cast<end_tag *>(other.value.at(i)))
-					return false;
-				break;
-			case generic_tag::FLOAT:
-				if(*static_cast<float_tag *>(value.at(i)) != *static_cast<float_tag *>(other.value.at(i)))
-					return false;
-				break;
-			case generic_tag::INT:
-				if(*static_cast<int_tag *>(value.at(i)) != *static_cast<int_tag *>(other.value.at(i)))
-					return false;
-				break;
-			case generic_tag::LONG:
-				if(*static_cast<long_tag *>(value.at(i)) != *static_cast<long_tag *>(other.value.at(i)))
-					return false;
-				break;
-			case generic_tag::SHORT:
-				if(*static_cast<short_tag *>(value.at(i)) != *static_cast<short_tag *>(other.value.at(i)))
-					return false;
-				break;
-			case generic_tag::STRING:
-				if(*static_cast<string_tag *>(value.at(i)) != *static_cast<string_tag *>(other.value.at(i)))
-					return false;
-				break;
-			default:
-				return false;
-				break;
-		}
-	}
 	return true;
 }
 
 /*
- * Returns a tag at a given index in a list tag
+ * Return a list tag's data
  */
-generic_tag *list_tag::at(unsigned int index) {
-	if(index >= value.size())
-		return NULL;
-	return value.at(index);
+std::vector<char> list_tag::get_data(void)  {
+	short len;
+	unsigned int array_len;
+	const char *name, *name_len, *array_len_value;
+	std::vector<char> data, sub_data;
+
+	// form data representation
+	len = this->name.size();
+	name = this->name.data();
+	array_len = this->value.size();
+	name_len = reinterpret_cast<const char *>(&len);
+	array_len_value = reinterpret_cast<const char *>(&array_len);
+	data.insert(data.end(), sizeof(type), *reinterpret_cast<const char *>(&type));
+	for(unsigned int i = 0; i < sizeof(len); ++i)
+		data.insert(data.end(), name_len[i]);
+	for(unsigned short i = 0; i < len; ++i)
+		data.insert(data.end(), name[i]);
+	data.insert(data.end(), sizeof(ele_type), *reinterpret_cast<const char *>(&ele_type));
+	for(unsigned int i = 0; i < sizeof(array_len); ++i)
+		data.insert(data.end(), array_len_value[i]);
+	for(unsigned int i = 0; i < array_len; ++i) {
+		sub_data = value.at(i)->get_data();
+		data.insert(data.end(), sub_data.begin(), sub_data.end());
+	}
+	return data;
 }
 
 /*
- * Returns a string representation of a list tag
+ * Insert a tag into a list tag at a given index
  */
-std::string list_tag::to_string(void) {
+bool list_tag::insert(generic_tag *value, unsigned int index) {
+
+	// check for valid type
+	if(value->get_type() != ele_type)
+		return false;
+	this->value.insert(this->value.begin() + index, value);
+	return true;
+}
+
+/*
+ * Insert a tag onto the tail of a list tag
+ */
+bool list_tag::push_back(generic_tag *value) {
+
+	// check for valid type
+	if(value->get_type() != ele_type)
+		return false;
+	this->value.push_back(value);
+	return true;
+}
+
+/*
+ * Return a string representation of a list tag
+ */
+std::string list_tag::to_string(unsigned int tab) {
 	std::stringstream ss;
 
-	// create string representation
-	ss << generic_tag::type_to_string(type);
-	if(!name.empty())
-		ss << " " << name;
-	ss << " (" << value.size() << ")";
+	// form string representation
+	ss << generic_tag::to_string(tab);
 	if(!value.empty()) {
-		ss << " {" << std::endl;
+		ss << " (" << value.size() << ") {" << std::endl;
 		for(unsigned int i = 0; i < value.size(); ++i)
-			ss << "\t" << value.at(i)->to_string() << std::endl;
+			ss << value.at(i)->to_string(tab + 1) << std::endl;
+		generic_tag::append_tabs(tab, ss);
 		ss << "}";
 	}
 	return ss.str();

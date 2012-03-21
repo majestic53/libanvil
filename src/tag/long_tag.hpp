@@ -20,65 +20,79 @@
 #ifndef LONG_TAG_HPP_
 #define LONG_TAG_HPP_
 
+#include <string>
+#include <vector>
 #include "generic_tag.hpp"
 
 class long_tag : public generic_tag {
-public:
+private:
 
 	/*
 	 * Long tag value
 	 */
-	int64_t value;
+	long value;
+
+public:
 
 	/*
 	 * Long tag constructor
 	 */
-	long_tag(void) : generic_tag(LONG), value(0) { return; }
+	long_tag(void) : generic_tag(LONG) { value = 0; }
 
 	/*
 	 * Long tag constructor
 	 */
-	long_tag(const long_tag &other) : generic_tag(other.name, LONG), value(other.value) { return; }
+	long_tag(const long_tag &other) : generic_tag(other.name, LONG) { value = other.value; };
 
 	/*
 	 * Long tag constructor
 	 */
-	long_tag(int64_t value) : generic_tag(LONG), value(value) { return; }
+	long_tag(long value) : generic_tag(LONG) { this->value = value; }
 
 	/*
 	 * Long tag constructor
 	 */
-	long_tag(const std::string &name, int64_t value) : generic_tag(name, LONG), value(value) { return; }
+	long_tag(const std::string &name, long value) : generic_tag(name, LONG) { this->value = value; }
 
 	/*
 	 * Long tag destructor
 	 */
-	~long_tag(void) { return; }
+	virtual ~long_tag(void) { return; }
 
 	/*
-	 * Long tag assignment
+	 * Long tag assignment operator
 	 */
 	long_tag &operator=(const long_tag &other);
 
 	/*
-	 * Long tag equals
+	 * Long tag equals operator
 	 */
-	bool operator==(const long_tag &other);
+	bool operator==(const generic_tag &other);
 
 	/*
-	 * Long tag not equals
+	 * Long tag not-equals operator
 	 */
-	bool operator!=(const long_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Returns a long tags value
+	 * Return a long tag's data
 	 */
-	void *get_value(void) { return &value; }
+	std::vector<char> get_data(void);
 
 	/*
-	 * Returns a string representation of a long tag
+	 * Return a long tag's value
 	 */
-	std::string to_string(void);
+	long get_value(void) { return value; }
+
+	/*
+	 * Set a long tag's value
+	 */
+	void set_value(long value) { this->value = value; }
+
+	/*
+	 * Return a string representation of a long tag
+	 */
+	std::string to_string(unsigned int tab);
 };
 
 #endif

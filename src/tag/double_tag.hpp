@@ -20,65 +20,79 @@
 #ifndef DOUBLE_TAG_HPP_
 #define DOUBLE_TAG_HPP_
 
+#include <string>
+#include <vector>
 #include "generic_tag.hpp"
 
 class double_tag : public generic_tag {
-public:
+private:
 
 	/*
 	 * Double tag value
 	 */
 	double value;
 
-	/*
-	 * Double tag constructor
-	 */
-	double_tag(void) : generic_tag(DOUBLE), value(0) { return; }
+public:
 
 	/*
 	 * Double tag constructor
 	 */
-	double_tag(const double_tag &other) : generic_tag(other.name, DOUBLE), value(other.value) { return; }
+	double_tag(void) : generic_tag(DOUBLE) { value = 0; }
 
 	/*
 	 * Double tag constructor
 	 */
-	double_tag(double value) : generic_tag(DOUBLE), value(value) { return; }
+	double_tag(const double_tag &other) : generic_tag(other.name, DOUBLE) { value = other.value; };
 
 	/*
 	 * Double tag constructor
 	 */
-	double_tag(const std::string &name, double value) : generic_tag(name, DOUBLE), value(value) { return; }
+	double_tag(double value) : generic_tag(DOUBLE) { this->value = value; }
+
+	/*
+	 * Double tag constructor
+	 */
+	double_tag(const std::string &name, double value) : generic_tag(name, DOUBLE) { this->value = value; }
 
 	/*
 	 * Double tag destructor
 	 */
-	~double_tag(void) { return; }
+	virtual ~double_tag(void) { return; }
 
 	/*
-	 * Double tag assignment
+	 * Double tag assignment operator
 	 */
 	double_tag &operator=(const double_tag &other);
 
 	/*
-	 * Double tag equals
+	 * Double tag equals operator
 	 */
-	bool operator==(const double_tag &other);
+	bool operator==(const generic_tag &other);
 
 	/*
-	 * Double tag not equals
+	 * Double tag not-equals operator
 	 */
-	bool operator!=(const double_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Returns a double tags value
+	 * Return a double tag's data
 	 */
-	void *get_value(void) { return &value; }
+	std::vector<char> get_data(void);
 
 	/*
-	 * Returns a string representation of a double tag
+	 * Return a double tag's value
 	 */
-	std::string to_string(void);
+	double get_value(void) { return value; }
+
+	/*
+	 * Set a double tag's value
+	 */
+	void set_value(double value) { this->value = value; }
+
+	/*
+	 * Return a string representation of a double tag
+	 */
+	std::string to_string(unsigned int tab);
 };
 
 #endif

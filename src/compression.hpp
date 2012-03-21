@@ -1,5 +1,5 @@
 /*
- * region_dim.hpp
+ * compression.hpp
  * Copyright (C) 2012 David Jolly
  * ----------------------
  *
@@ -17,41 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REGION_DIM_HPP_
-#define REGION_DIM_HPP_
+#ifndef COMPRESSION_HPP_
+#define COMPRESSION_HPP_
 
-class region_dim {
+#include <vector>
+
+class compression {
 public:
 
 	/*
-	 * Maximum number of surface blocks per chunk
+	 * Zlib segment size
 	 */
-	static const unsigned int BLOCK_COUNT = 256;
+	static const unsigned int SEG_SIZE = 16384;
 
 	/*
-	 * Block width of a chunk
+	 * Deflate a char buffer
 	 */
-	static const unsigned int BLOCK_WIDTH = 16;
+	static bool deflate_(std::vector<char> &data);
 
 	/*
-	 * Block height of a chunk
+	 * Inflate a char buffer
 	 */
-	static const unsigned int BLOCK_HEIGHT = 256;
-
-	/*
-	 * Maximum number of chunks in region
-	 */
-	static const unsigned int CHUNK_COUNT = 1024;
-
-	/*
-	 * Chunk width of a region
-	 */
-	static const unsigned int CHUNK_WIDTH = 32;
-
-	/*
-	 * Region file sector size
-	 */
-	static const unsigned int SECTOR_SIZE = 4096;
+	static bool inflate_(std::vector<char> &data);
 };
 
 #endif

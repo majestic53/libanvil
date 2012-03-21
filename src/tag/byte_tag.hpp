@@ -20,66 +20,79 @@
 #ifndef BYTE_TAG_HPP_
 #define BYTE_TAG_HPP_
 
-#include <cstdint>
+#include <string>
+#include <vector>
 #include "generic_tag.hpp"
 
 class byte_tag : public generic_tag {
-public:
+private:
 
 	/*
 	 * Byte tag value
 	 */
-	int8_t value;
+	char value;
+
+public:
 
 	/*
 	 * Byte tag constructor
 	 */
-	byte_tag(void) : generic_tag(BYTE), value(0) { return; }
+	byte_tag(void) : generic_tag(BYTE) { value = 0; }
 
 	/*
 	 * Byte tag constructor
 	 */
-	byte_tag(const byte_tag &other) : generic_tag(other.name, BYTE), value(other.value) { return; }
+	byte_tag(const byte_tag &other) : generic_tag(other.name, BYTE) { value = other.value; };
 
 	/*
 	 * Byte tag constructor
 	 */
-	byte_tag(int8_t value) : generic_tag(BYTE), value(value) { return; }
+	byte_tag(char value) : generic_tag(BYTE) { this->value = value; }
 
 	/*
 	 * Byte tag constructor
 	 */
-	byte_tag(const std::string &name, int8_t value) : generic_tag(name, BYTE), value(value) { return; }
+	byte_tag(const std::string &name, char value) : generic_tag(name, BYTE) { this->value = value; }
 
 	/*
 	 * Byte tag destructor
 	 */
-	~byte_tag(void) { return; }
+	virtual ~byte_tag(void) { return; }
 
 	/*
-	 * Byte tag assignment
+	 * Byte tag assignment operator
 	 */
 	byte_tag &operator=(const byte_tag &other);
 
 	/*
-	 * Byte tag equals
+	 * Byte tag equals operator
 	 */
-	bool operator==(const byte_tag &other);
+	bool operator==(const generic_tag &other);
 
 	/*
-	 * Byte tag not equals
+	 * Byte tag not-equals operator
 	 */
-	bool operator!=(const byte_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Returns a byte tags value
+	 * Return a byte tag's data
 	 */
-	void *get_value(void) { return &value; }
+	std::vector<char> get_data(void);
 
 	/*
-	 * Returns a string representation of a byte tag
+	 * Return a byte tag's value
 	 */
-	std::string to_string(void);
+	char get_value(void) { return value; }
+
+	/*
+	 * Set a byte tag's value
+	 */
+	void set_value(char value) { this->value = value; }
+
+	/*
+	 * Return a string representation of a byte tag
+	 */
+	std::string to_string(unsigned int tab);
 };
 
 #endif

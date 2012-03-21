@@ -20,7 +20,6 @@
 #ifndef BYTE_STREAM_HPP_
 #define BYTE_STREAM_HPP_
 
-#include <cstdint>
 #include <cstdlib>
 #include <string>
 #include <vector>
@@ -31,12 +30,12 @@ private:
 	/*
 	 * Stream buffer
 	 */
-	int8_t *buff;
+	std::vector<char> buff;
 
 	/*
 	 * Stream buffer length/position
 	 */
-	unsigned int len, pos;
+	unsigned int pos;
 
 	/*
 	 * Swap endian
@@ -49,22 +48,21 @@ private:
 	 */
 	template<class T>
 	unsigned int read_stream(T &var) {
+		std::vector<char> data;
 
 		// assign type T from stream
 		unsigned int width = sizeof(T);
-		char *data = new char[width];
 		for(unsigned int i = 0; i < width; i++) {
 			if(available() == END_OF_STREAM)
 				return END_OF_STREAM;
-			data[i] = buff[pos++];
+			data.push_back(buff.at(pos++));
 		}
 		if(swap)
-			swap_endian<char>(data, width);
+			swap_endian(data);
 		var = 0;
 		for(unsigned int i = 0; i < width - 1; i++)
-			var |= data[i] << 8 * ((width - 1) - i);
-		var |= data[width - 1];
-		delete[] data;
+			var |= data.at(i) << 8 * ((width - 1) - i);
+		var |= data.at(width - 1);
 		return SUCCESS;
 	}
 
@@ -74,35 +72,25 @@ private:
 	 */
 	template<class T>
 	unsigned int read_stream_float(T &var) {
+		std::vector<char> data;
 
 		// assign type T from stream
 		unsigned int width = sizeof(T);
-		char *data = new char[width];
 		for(unsigned int i = 0; i < width; i++) {
 			if(available() == END_OF_STREAM)
 				return END_OF_STREAM;
-			data[i] = buff[pos++];
+			data.push_back(buff[pos++]);
 		}
 		if(swap)
-			swap_endian<char>(data, width);
-		var = atof((char *) data);
-		delete[] data;
+			swap_endian(data);
+		var = atof((char *) data.data());
 		return SUCCESS;
 	}
 
 	/*
-	 * Convert between endianesses
+	 * Convert between endian types
 	 */
-	template<class T>
-	void swap_endian(T *&buff, unsigned int len) {
-
-		// create a temp array to hold the reverse
-		T *reverse = new T[len];
-		for(unsigned int i = 0; i < len; i++)
-			reverse[i] = buff[(len - 1) - i];
-		delete[] buff;
-		buff = reverse;
-	}
+	void swap_endian(std::vector<char> &data);
 
 public:
 
@@ -121,27 +109,27 @@ public:
 	/*
 	 * Byte stream constructor
 	 */
-	byte_stream(void);
+	byte_stream(void) : pos(0), swap(NO_SWAP_ENDIAN) { return; }
 
 	/*
 	 * Byte stream constructor
 	 */
-	byte_stream(const byte_stream &other);
+	byte_stream(const byte_stream &other) : buff(other.buff), pos(other.pos), swap(other.swap) { return; }
 
 	/*
 	 * Byte stream constructor
 	 */
-	byte_stream(const std::string &input);
+	byte_stream(const std::string &buff);
 
 	/*
 	 * Byte stream constructor
 	 */
-	byte_stream(std::vector<int8_t> &input);
+	byte_stream(std::vector<char> &buff);
 
 	/*
 	 * Byte stream destructor
 	 */
-	virtual ~byte_stream(void) { delete[] buff; }
+	virtual ~byte_stream(void) { return; }
 
 	/*
 	 * Byte stream assignment
@@ -171,22 +159,22 @@ public:
 	/*
 	 * Byte stream output
 	 */
-	bool operator>>(int8_t &output);
+	bool operator>>(char &output);
 
 	/*
 	 * Byte stream output
 	 */
-	bool operator>>(int16_t &output);
+	bool operator>>(short &output);
 
 	/*
 	 * Byte stream output
 	 */
-	bool operator>>(int32_t &output);
+	bool operator>>(int &output);
 
 	/*
 	 * Byte stream output
 	 */
-	bool operator>>(int64_t &output);
+	bool operator>>(long &output);
 
 	/*
 	 * Byte stream output
@@ -221,7 +209,7 @@ public:
 	/*
 	 * Returns the entire contents of the stream buffer
 	 */
-	int8_t *rdbuf(void) { return buff; }
+	const char *rdbuf(void) { return buff.data(); }
 
 	/*
 	 * Resets the streams position
@@ -231,7 +219,7 @@ public:
 	/*
 	 * Returns the streams total size
 	 */
-	unsigned int size(void) { return len; }
+	unsigned int size(void) { return buff.size(); }
 
 	/*
 	 * Returns a string representation of the stream

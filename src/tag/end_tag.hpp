@@ -20,6 +20,8 @@
 #ifndef END_TAG_HPP_
 #define END_TAG_HPP_
 
+#include <string>
+#include <vector>
 #include "generic_tag.hpp"
 
 class end_tag : public generic_tag {
@@ -33,37 +35,37 @@ public:
 	/*
 	 * End tag constructor
 	 */
-	end_tag(const end_tag &other) : generic_tag(other.name, END) { return; }
+	end_tag(const end_tag &other) : generic_tag(other.name, END) { return; };
 
 	/*
 	 * End tag destructor
 	 */
-	~end_tag(void) { return; }
+	virtual ~end_tag(void) { return; }
 
 	/*
-	 * End tag assignment
+	 * End tag assignment operator
 	 */
 	end_tag &operator=(const end_tag &other);
 
 	/*
-	 * End tag equals
+	 * End tag equals operator
 	 */
-	bool operator==(const end_tag &other) { return generic_tag::operator ==(other); }
+	bool operator==(const generic_tag &other);
 
 	/*
-	 * End tag not equals
+	 * End tag not-equals operator
 	 */
-	bool operator!=(const end_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Returns an end tags value
+	 * Return a end tag's data
 	 */
-	void *get_value(void) { return NULL; }
+	std::vector<char> get_data(void);
 
 	/*
-	 * Returns a string representation of an end tag
+	 * Return a string representation of a end tag
 	 */
-	std::string to_string(void);
+	std::string to_string(unsigned int tab) { return generic_tag::to_string(tab); }
 };
 
 #endif

@@ -20,148 +20,181 @@
 #ifndef REGION_FILE_READER_HPP_
 #define REGION_FILE_READER_HPP_
 
-#include <cstdint>
+#include <fstream>
+#include <stdexcept>
 #include <string>
-#include <vector>
-#include "region_chunk_tag.hpp"
-#include "region_dim.hpp"
+#include "byte_stream.hpp"
 #include "region_file.hpp"
-#include "region_file_exc.hpp"
 
-class region_file_reader {
+class region_file_reader : public region_file {
 private:
-
-	/*
-	 * Chunk tag data
-	 */
-	region_chunk_tag data[region_dim::REGION_AREA];
 
 	/*
 	 * Region file
 	 */
-	region_file file;
+	std::ifstream file;
 
 	/*
-	 * Chunk fill count
+	 * Read a chunk tag from data
 	 */
-	unsigned int fill_count;
+	void parse_chunk_tag(std::vector<char> &data, chunk_tag &tag);
 
 	/*
-	 * Chunk fill status
+	 * Read a tag from data
 	 */
-	bool fill[region_dim::REGION_AREA];
+	generic_tag *parse_tag(byte_stream &stream, bool is_list, char list_type);
 
 	/*
-	 * Cache data at coord if not already cached
+	 * Reads an array tag value from stream
 	 */
-	void cache_coord(unsigned int x, unsigned int z, unsigned int pos);
+	template <class T>
+	std::vector<T> read_array_value(byte_stream &stream) {
+		int ele_len;
+		std::vector<T> value;
+
+		// check stream status
+		if(!stream.good())
+			throw std::runtime_error("Unexpected end of stream");
+
+		// retrieve value
+		ele_len = read_value<int>(stream);
+		for(int i = 0; i < ele_len; ++i)
+			value.push_back(read_value<T>(stream));
+		return value;
+	}
 
 	/*
-	 * Varify that chunk coord are valid
+	 * Reads chunk data from a file
 	 */
-	unsigned int varify_coord(unsigned int x, unsigned int z, unsigned int width, unsigned int max);
+	void read_chunks(void);
+
+	/*
+	 * Reads header data from a file
+	 */
+	void read_header(void);
+
+	/*
+	 * Reads a string tag value from stream
+	 */
+	std::string read_string_value(byte_stream &stream);
+
+	/*
+	 * Reads a numeric tag value from stream
+	 */
+	template <class T>
+	T read_value(byte_stream &stream) {
+		T value;
+
+		// check stream status
+		if(!stream.good())
+			throw std::runtime_error("Unexpected end of stream");
+
+		// retrieve value
+		stream >> value;
+		return value;
+	}
 
 public:
 
 	/*
 	 * Region file reader constructor
 	 */
-	region_file_reader(void);
+	region_file_reader(void) { return; }
 
 	/*
 	 * Region file reader constructor
 	 */
-	region_file_reader(const region_file_reader &other);
+	region_file_reader(const std::string &path) : region_file(path) { return; }
 
 	/*
 	 * Region file reader constructor
 	 */
-	region_file_reader(const std::string &path);
+	region_file_reader(const region_file_reader &other) : region_file(other.path, other.reg) { return; }
 
 	/*
 	 * Region file reader destructor
 	 */
-	virtual ~region_file_reader(void) { return; }
+	virtual ~region_file_reader(void) { file.close(); }
 
 	/*
-	 * Region file reader assignment
+	 * Region file reader assignment operator
 	 */
 	region_file_reader &operator=(const region_file_reader &other);
 
 	/*
-	 * Region file reader equals
+	 * Region file reader equals operator
 	 */
 	bool operator==(const region_file_reader &other);
 
 	/*
-	 * Region file reader not equals
+	 * Region file reader not-equals operator
 	 */
 	bool operator!=(const region_file_reader &other) { return !(*this == other); }
 
 	/*
-	 * Returns a chunk tag biome value at a given x, z & b coord
+	 * Returns a region biome value at a given x, z & b coord
 	 */
-	int8_t get_biome_at(unsigned int x, unsigned int z, unsigned int b_x, unsigned int b_z);
+	char get_biome_at(unsigned int x, unsigned int z, unsigned int b_x, unsigned int b_z);
 
 	/*
-	 * Returns a chunk tag biomes at a given x, z coord
+	 * Returns a region's biomes at a given x, z coord
 	 */
-	std::vector<int8_t> get_biomes_at(unsigned int x, unsigned int z);
+	std::vector<char> get_biomes_at(unsigned int x, unsigned int z);
 
 	/*
-	 * Returns a chunk tag height value at a given x, z & b coord
+	 * Returns a region block value at given x, z & b coord
 	 */
-	int32_t get_height_at(unsigned int x, unsigned int z, unsigned int b_x, unsigned int b_z);
+	int get_block_at(unsigned int x, unsigned int z, unsigned int b_x, unsigned int b_y, unsigned int b_z);
 
 	/*
-	 * Returns a chunk tag height map at a given x, z coord
+	 * Returns a region's blocks at a given x, z coord
 	 */
-	std::vector<int32_t> get_heightmap_at(unsigned int x, unsigned int z);
+	std::vector<int> get_blocks_at(unsigned int x, unsigned int z);
 
 	/*
-	 * Returns a chunk tag block value at given x, z & b coord
+	 * Returns a region's chunk tag at a given x, z coord
 	 */
-	int32_t get_block_at(unsigned int x, unsigned int z, unsigned int b_x, unsigned int b_y, unsigned int b_z);
+	chunk_tag &get_chunk_tag_at(unsigned int x, unsigned int z);
 
 	/*
-	 * Returns chunk tag blocks at a given x, z coord
+	 * Returns a region height value at a given x, z & b coord
 	 */
-	std::vector<int32_t> get_blocks_at(unsigned int x, unsigned int z);
+	int get_height_at(unsigned int x, unsigned int z, unsigned int b_x, unsigned int b_z);
 
 	/*
-	 * Returns a chunk tag at a given x, z coord
+	 * Returns a region's height map at a given x, z coord
 	 */
-	region_chunk_tag &get_tag_at(unsigned int x, unsigned int z);
+	std::vector<int> get_heightmap_at(unsigned int x, unsigned int z);
 
 	/*
-	 * Returns a region file readers path
+	 * Returns a region file reader's file
 	 */
-	region_file &get_file(void) { return file; }
+	std::ifstream &get_file(void) { return file; }
 
 	/*
-	 * Returns a region file readers fill count
+	 * Return a region's x coordinate
 	 */
-	unsigned int get_fill_count(void) { return fill_count; }
+	int get_x_coord(void) { return get_region().get_x(); }
 
 	/*
-	 * Returns a region x coord
+	 * Return a region's z coordinate
 	 */
-	int get_x_coord(void) { return file.get_region_x_coord(); }
+	int get_z_coord(void) { return get_region().get_z(); }
 
 	/*
-	 * Returns a region z coord
+	 * Return a region's filled status
 	 */
-	int get_z_coord(void) { return file.get_region_z_coord(); }
+	bool is_filled(unsigned int x, unsigned int z);
 
 	/*
-	 * Returns fill status at a given x, z coord
+	 * Reads a file into region_file
 	 */
-	bool is_filled(unsigned int x, unsigned int z) { return fill[varify_coord(x, z, region_dim::REGION_X, region_dim::REGION_AREA)]; }
+	void read(void);
 
 	/*
 	 * Returns a string representation of a region file reader
 	 */
-	std::string to_string(void);
+	std::string to_string(void) { return region_file::to_string(); }
 };
 
 #endif

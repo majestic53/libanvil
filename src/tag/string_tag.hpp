@@ -21,15 +21,18 @@
 #define STRING_TAG_HPP_
 
 #include <string>
+#include <vector>
 #include "generic_tag.hpp"
 
 class string_tag : public generic_tag {
-public:
+private:
 
 	/*
 	 * String tag value
 	 */
 	std::string value;
+
+public:
 
 	/*
 	 * String tag constructor
@@ -39,47 +42,57 @@ public:
 	/*
 	 * String tag constructor
 	 */
-	string_tag(const string_tag &other) : generic_tag(other.name, STRING), value(other.value) { return; }
+	string_tag(const string_tag &other) : generic_tag(other.name, STRING) { value = other.value; };
 
 	/*
 	 * String tag constructor
 	 */
-	string_tag(const std::string &value) : generic_tag(STRING), value(value) { return; }
+	string_tag(const std::string &value) : generic_tag(STRING) { this->value = value; }
 
 	/*
 	 * String tag constructor
 	 */
-	string_tag(const std::string &name, const std::string &value) : generic_tag(name, STRING), value(value) { return; }
+	string_tag(const std::string &name, const std::string &value) : generic_tag(name, STRING) { this->value = value; }
 
 	/*
 	 * String tag destructor
 	 */
-	~string_tag(void) { return; }
+	virtual ~string_tag(void) { return; }
 
 	/*
-	 * String tag assignment
+	 * String tag assignment operator
 	 */
 	string_tag &operator=(const string_tag &other);
 
 	/*
-	 * String tag equals
+	 * String tag equals operator
 	 */
-	bool operator==(const string_tag &other);
+	bool operator==(const generic_tag &other);
 
 	/*
-	 * String tag not equals
+	 * String tag not-equals operator
 	 */
-	bool operator!=(const string_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Returns a string tags value
+	 * Return a string tag's data
 	 */
-	void *get_value(void) { return &value; }
+	std::vector<char> get_data(void);
 
 	/*
-	 * Returns a string representation of a string tag
+	 * Return a string tag's value
 	 */
-	std::string to_string(void);
+	std::string &get_value(void) { return value; }
+
+	/*
+	 * Set a string tag's value
+	 */
+	void set_value(std::string &value) { this->value = value; }
+
+	/*
+	 * Return a string representation of a string tag
+	 */
+	std::string to_string(unsigned int tab);
 };
 
 #endif

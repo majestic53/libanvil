@@ -20,16 +20,19 @@
 #ifndef COMPOUND_TAG_HPP_
 #define COMPOUND_TAG_HPP_
 
+#include <string>
 #include <vector>
 #include "generic_tag.hpp"
 
 class compound_tag : public generic_tag {
-public:
+private:
 
 	/*
 	 * Compound tag value
 	 */
 	std::vector<generic_tag *> value;
+
+public:
 
 	/*
 	 * Compound tag constructor
@@ -39,67 +42,82 @@ public:
 	/*
 	 * Compound tag constructor
 	 */
-	compound_tag(const compound_tag &other) : generic_tag(other.name, COMPOUND), value(other.value) { return; }
+	compound_tag(const compound_tag &other) : generic_tag(other.name, COMPOUND) { value = other.value; };
 
 	/*
 	 * Compound tag constructor
 	 */
-	compound_tag(std::vector<generic_tag *> value) : generic_tag(COMPOUND), value(value) { return; }
-
-	/*
-	 * Compound tag constructor
-	 */
-	compound_tag(const std::string &name, std::vector<generic_tag *> &value) : generic_tag(name, COMPOUND), value(value) { return; }
+	compound_tag(const std::string &name) : generic_tag(name, COMPOUND) { return; }
 
 	/*
 	 * Compound tag destructor
 	 */
-	~compound_tag(void) { value.clear(); }
+	virtual ~compound_tag(void) { return; }
 
 	/*
-	 * Compound tag assignment
+	 * Compound tag assignment operator
 	 */
 	compound_tag &operator=(const compound_tag &other);
 
 	/*
-	 * Compound tag equals
+	 * Compound tag equals operator
 	 */
-	bool operator==(const compound_tag &other);
+	bool operator==(const generic_tag &other);
 
 	/*
-	 * Compound tag not equals
+	 * Compound tag not-equals operator
 	 */
-	bool operator!=(const compound_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Add a tag to a compound tag
+	 * Returns a compound tag tag at a given index
 	 */
-	void add(generic_tag *tag) { value.push_back(tag); }
+	generic_tag *at(unsigned int index) { return value.at(index); }
 
 	/*
-	 * Returns a tag at a given index in a compound tag
-	 */
-	generic_tag *at(unsigned int index);
-
-	/*
-	 * Returns the empty status of a compound tag
+	 * Returns a compound tag's empty status
 	 */
 	bool empty(void) { return value.empty(); }
 
 	/*
-	 * Returns a compound tag value
+	 * Erase a tag in a compound tag at a given index
 	 */
-	void *get_value(void) { return &value; }
+	void erase(unsigned int index) { value.erase(value.begin() + index); }
 
 	/*
-	 * Returns the size of a compound tag
+	 * Return a compound tag's data
+	 */
+	std::vector<char> get_data(void);
+
+	/*
+	 * Return a compound tag's value
+	 */
+	std::vector<generic_tag *> &get_value(void) { return value; }
+
+	/*
+	 * Insert a tag into a compound tag at a given index
+	 */
+	void insert(generic_tag *value, unsigned int index) { this->value.insert(this->value.begin() + index, value); }
+
+	/*
+	 * Insert a tag onto the tail of a compound tag
+	 */
+	void push_back(generic_tag *value) { this->value.push_back(value); }
+
+	/*
+	 * Set a compound tag's value
+	 */
+	void set_value(std::vector<generic_tag *> &value) { this->value = value; }
+
+	/*
+	 * Returns a compound tag value's size
 	 */
 	unsigned int size(void) { return value.size(); }
 
 	/*
-	 * Returns a string representation of a compound tag
+	 * Return a string representation of a compound tag
 	 */
-	std::string to_string(void);
+	std::string to_string(unsigned int tab);
 };
 
 #endif

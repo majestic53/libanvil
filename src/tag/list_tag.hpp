@@ -20,86 +20,119 @@
 #ifndef LIST_TAG_HPP_
 #define LIST_TAG_HPP_
 
+#include <string>
 #include <vector>
 #include "generic_tag.hpp"
 
 class list_tag : public generic_tag {
-public:
+private:
+
+	/*
+	 * List tag element type
+	 */
+	char ele_type;
 
 	/*
 	 * List tag value
 	 */
 	std::vector<generic_tag *> value;
 
-	/*
-	 * List tag constructor
-	 */
-	list_tag(void) : generic_tag(LIST) { return; }
+public:
 
 	/*
 	 * List tag constructor
 	 */
-	list_tag(const list_tag &other) : generic_tag(other.name, LIST), value(other.value) { return; }
+	list_tag(void) : generic_tag(LIST), ele_type(BYTE) { return; }
 
 	/*
 	 * List tag constructor
 	 */
-	list_tag(std::vector<generic_tag *> value) : generic_tag(LIST), value(value) { return; }
+	list_tag(const list_tag &other) : generic_tag(other.name, LIST), ele_type(other.ele_type) { value = other.value; };
 
 	/*
 	 * List tag constructor
 	 */
-	list_tag(const std::string &name, std::vector<generic_tag *> &value) : generic_tag(name, LIST), value(value) { return; }
+	list_tag(char ele_type) : generic_tag(LIST), ele_type(ele_type) { return; }
+
+	/*
+	 * List tag constructor
+	 */
+	list_tag(const std::string &name, char ele_type) : generic_tag(name, LIST), ele_type(ele_type) { return; }
 
 	/*
 	 * List tag destructor
 	 */
-	~list_tag(void) { value.clear(); }
+	virtual ~list_tag(void) { return; }
 
 	/*
-	 * List tag assignment
+	 * List tag assignment operator
 	 */
 	list_tag &operator=(const list_tag &other);
 
 	/*
-	 * List tag equals
+	 * List tag equals operator
 	 */
-	bool operator==(const list_tag &other);
+	bool operator==(const generic_tag &other);
 
 	/*
-	 * List tag not equals
+	 * List tag not-equals operator
 	 */
-	bool operator!=(const list_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Add a tag to a list tag
+	 * Returns a list tag tag at a given index
 	 */
-	void add(generic_tag *tag) { value.push_back(tag); }
+	generic_tag *at(unsigned int index) { return value.at(index); }
 
 	/*
-	 * Returns a tag at a given index in a list tag
-	 */
-	generic_tag *at(unsigned int index);
-
-	/*
-	 * Returns the empty status of a list tag
+	 * Returns a list tag's empty status
 	 */
 	bool empty(void) { return value.empty(); }
 
 	/*
-	 * Returns a list tag value
+	 * Erase a tag in a list tag at a given index
 	 */
-	void *get_value(void) { return &value; }
+	void erase(unsigned int index) { value.erase(value.begin() + index); }
 
 	/*
-	 * Returns the size of a list tag
+	 * Return a list tag's data
+	 */
+	std::vector<char> get_data(void);
+
+	/*
+	 * Returns a list tag's element type
+	 */
+	char get_element_type(void) { return ele_type; }
+
+	/*
+	 * Return a list tag's value
+	 */
+	std::vector<generic_tag *> &get_value(void) { return value; }
+
+	/*
+	 * Insert a tag into a list tag at a given index
+	 */
+	bool insert(generic_tag *value, unsigned int index);
+
+	/*
+	 * Insert a tag onto the tail of a list tag
+	 */
+	bool push_back(generic_tag *value);
+
+	/*
+	 * Set a list tag's value
+	 */
+	void set_value(std::vector<generic_tag *> &value) { this->value = value; }
+
+	/*
+	 * Returns a list tag value's size
 	 */
 	unsigned int size(void) { return value.size(); }
 
 	/*
-	 * Returns a string representation of a list tag
+	 * Return a string representation of a list tag
 	 */
-	std::string to_string(void);
+	std::string to_string(unsigned int tab);
 };
 
 #endif

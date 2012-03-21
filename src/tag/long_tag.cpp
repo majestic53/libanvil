@@ -21,7 +21,7 @@
 #include "long_tag.hpp"
 
 /*
- * Long tag assignment
+ * Long tag assignment operator
  */
 long_tag &long_tag::operator=(const long_tag &other) {
 
@@ -29,36 +29,63 @@ long_tag &long_tag::operator=(const long_tag &other) {
 	if(this == &other)
 		return *this;
 
-	// set attributes
-	generic_tag::operator =(other);
+	// assign attributes
+	name = other.name;
+	type = other.type;
 	value = other.value;
 	return *this;
 }
 
 /*
- * Long tag equals
+ * Long tag equals operator
  */
-bool long_tag::operator==(const long_tag &other) {
+bool long_tag::operator==(const generic_tag &other) {
 
 	// check for self
 	if(this == &other)
 		return true;
 
+	// convert into same type
+	const long_tag *other_tag = dynamic_cast<const long_tag *>(&other);
+	if(!other_tag)
+		return false;
+
 	// check attributes
-	return generic_tag::operator ==(other)
-			&& value == other.value;
+	return name == other.name
+			&& type == other.type
+			&& value == other_tag->value;
 }
 
 /*
- * Returns a string representation of a Long tag
+ * Return a long tag's data
  */
-std::string long_tag::to_string(void) {
+std::vector<char> long_tag::get_data(void)  {
+	short len;
+	const char *name, *name_len, *value;
+	std::vector<char> data;
+
+	// form data representation
+	len = this->name.size();
+	name = this->name.data();
+	name_len = reinterpret_cast<const char *>(&len);
+	value = reinterpret_cast<const char *>(&this->value);
+	data.insert(data.end(), sizeof(type), *reinterpret_cast<const char *>(&type));
+	for(unsigned int i = 0; i < sizeof(len); ++i)
+		data.insert(data.end(), name_len[i]);
+	for(unsigned short i = 0; i < len; ++i)
+		data.insert(data.end(), name[i]);
+	for(unsigned int i = 0; i < sizeof(this->value); ++i)
+		data.insert(data.end(), value[i]);
+	return data;
+}
+
+/*
+ * Return a string representation of a long tag
+ */
+std::string long_tag::to_string(unsigned int tab) {
 	std::stringstream ss;
 
-	// create string representation
-	ss << generic_tag::type_to_string(type);
-	if(!name.empty())
-		ss << " " << name;
-	ss << ": " << value;
+	// form string representation
+	ss << generic_tag::to_string(tab) << ": " << value;
 	return ss.str();
 }

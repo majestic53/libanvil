@@ -20,17 +20,19 @@
 #ifndef BYTE_ARRAY_TAG_HPP_
 #define BYTE_ARRAY_TAG_HPP_
 
-#include <cstdint>
+#include <string>
 #include <vector>
 #include "generic_tag.hpp"
 
 class byte_array_tag : public generic_tag {
-public:
+private:
 
 	/*
 	 * Byte array tag value
 	 */
-	std::vector<int8_t> value;
+	std::vector<char> value;
+
+public:
 
 	/*
 	 * Byte array tag constructor
@@ -40,67 +42,87 @@ public:
 	/*
 	 * Byte array tag constructor
 	 */
-	byte_array_tag(const byte_array_tag &other) : generic_tag(other.name, BYTE_ARRAY), value(other.value) { return; }
+	byte_array_tag(const byte_array_tag &other) : generic_tag(other.name, BYTE_ARRAY) { value = other.value; };
 
 	/*
 	 * Byte array tag constructor
 	 */
-	byte_array_tag(std::vector<int8_t> value) : generic_tag(BYTE_ARRAY), value(value) { return; }
+	byte_array_tag(std::vector<char> value) : generic_tag(BYTE_ARRAY) { this->value = value; }
 
 	/*
 	 * Byte array tag constructor
 	 */
-	byte_array_tag(const std::string &name, std::vector<int8_t> &value) : generic_tag(name, BYTE_ARRAY), value(value) { return; }
+	byte_array_tag(const std::string &name, std::vector<char> value) : generic_tag(name, BYTE_ARRAY) { this->value = value; }
 
 	/*
 	 * Byte array tag destructor
 	 */
-	~byte_array_tag(void) { value.clear(); }
+	virtual ~byte_array_tag(void) { return; }
 
 	/*
-	 * Byte array tag assignment
+	 * Byte array tag assignment operator
 	 */
 	byte_array_tag &operator=(const byte_array_tag &other);
 
 	/*
-	 * Byte array tag equals
+	 * Byte array tag equals operator
 	 */
-	bool operator==(const byte_array_tag &other);
+	bool operator==(const generic_tag &other);
 
 	/*
-	 * Byte array tag not equals
+	 * Byte array tag not-equals operator
 	 */
-	bool operator!=(const byte_array_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Add a byte to a byte array tag
+	 * Returns a byte array tag byte at a given index
 	 */
-	void add(int8_t byte) { value.push_back(byte); }
+	char &at(unsigned int index) { return value.at(index); }
 
 	/*
-	 * Returns a byte value at a given index in a byte array tag
-	 */
-	int8_t at(unsigned int index);
-
-	/*
-	 * Returns the empty status of a byte array tag
+	 * Returns a byte array tag's empty status
 	 */
 	bool empty(void) { return value.empty(); }
 
 	/*
-	 * Returns a byte array tags value
+	 * Erase a byte in a byte array tag at a given index
 	 */
-	void *get_value(void) { return &value; }
+	void erase(unsigned int index) { value.erase(value.begin() + index); }
 
 	/*
-	 * Returns the size of a byte array tag
+	 * Return a byte array tag's data
+	 */
+	std::vector<char> get_data(void);
+
+	/*
+	 * Return a byte array tag's value
+	 */
+	std::vector<char> &get_value(void) { return value; }
+
+	/*
+	 * Insert a byte into a byte array tag at a given index
+	 */
+	void insert(char value, unsigned int index) { this->value.insert(this->value.begin() + index, value); }
+
+	/*
+	 * Insert a byte onto the tail of a byte array tag
+	 */
+	void push_back(char value) { this->value.push_back(value); }
+
+	/*
+	 * Set a byte array tag's value
+	 */
+	void set_value(std::vector<char> &value) { this->value = value; }
+
+	/*
+	 * Returns a byte array tag value's size
 	 */
 	unsigned int size(void) { return value.size(); }
 
 	/*
-	 * Returns a string representation of a byte array tag
+	 * Return a string representation of a byte array tag
 	 */
-	std::string to_string(void);
+	std::string to_string(unsigned int tab);
 };
 
 #endif

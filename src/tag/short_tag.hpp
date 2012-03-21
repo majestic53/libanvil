@@ -20,65 +20,79 @@
 #ifndef SHORT_TAG_HPP_
 #define SHORT_TAG_HPP_
 
+#include <string>
+#include <vector>
 #include "generic_tag.hpp"
 
 class short_tag : public generic_tag {
-public:
+private:
 
 	/*
 	 * Short tag value
 	 */
-	int16_t value;
+	short value;
+
+public:
 
 	/*
 	 * Short tag constructor
 	 */
-	short_tag(void) : generic_tag(SHORT), value(0) { return; }
+	short_tag(void) : generic_tag(SHORT) { value = 0; }
 
 	/*
 	 * Short tag constructor
 	 */
-	short_tag(const short_tag &other) : generic_tag(other.name, SHORT), value(other.value) { return; }
+	short_tag(const short_tag &other) : generic_tag(other.name, SHORT) { value = other.value; };
 
 	/*
 	 * Short tag constructor
 	 */
-	short_tag(int16_t value) : generic_tag(SHORT), value(value) { return; }
+	short_tag(short value) : generic_tag(SHORT) { this->value = value; }
 
 	/*
 	 * Short tag constructor
 	 */
-	short_tag(const std::string &name, int16_t value) : generic_tag(name, SHORT), value(value) { return; }
+	short_tag(const std::string &name, short value) : generic_tag(name, SHORT) { this->value = value; }
 
 	/*
 	 * Short tag destructor
 	 */
-	~short_tag(void) { return; }
+	virtual ~short_tag(void) { return; }
 
 	/*
-	 * Short tag assignment
+	 * Short tag assignment operator
 	 */
 	short_tag &operator=(const short_tag &other);
 
 	/*
-	 * Short tag equals
+	 * Short tag equals operator
 	 */
-	bool operator==(const short_tag &other);
+	bool operator==(const generic_tag &other);
 
 	/*
-	 * Short tag not equals
+	 * Short tag not-equals operator
 	 */
-	bool operator!=(const short_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Returns a short tags value
+	 * Return a short tag's data
 	 */
-	void *get_value(void) { return &value; }
+	std::vector<char> get_data(void);
 
 	/*
-	 * Returns a string representation of a short tag
+	 * Return a short tag's value
 	 */
-	std::string to_string(void);
+	short get_value(void) { return value; }
+
+	/*
+	 * Set a short tag's value
+	 */
+	void set_value(short value) { this->value = value; }
+
+	/*
+	 * Return a string representation of a short tag
+	 */
+	std::string to_string(unsigned int tab);
 };
 
 #endif

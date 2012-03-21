@@ -20,7 +20,7 @@
 #include "generic_tag.hpp"
 
 /*
- * Generic tag assignment
+ * Generic tag assignment operator
  */
 generic_tag &generic_tag::operator=(const generic_tag &other) {
 
@@ -28,72 +28,84 @@ generic_tag &generic_tag::operator=(const generic_tag &other) {
 	if(this == &other)
 		return *this;
 
-	// set attributes
-	type = other.type;
+	// assign attributes
 	name = other.name;
+	type = other.type;
 	return *this;
 }
 
 /*
- * Generic tag equals
+ * Generic tag equals operator
  */
 bool generic_tag::operator==(const generic_tag &other) {
 
-	// check for self
+	// check if self
 	if(this == &other)
 		return true;
 
 	// check attributes
-	return type == other.type
-			&& name == other.name;
+	return name == other.name
+			&& type == other.type;
 }
 
 /*
- * Returns a string representation of a generic tag
+ * Append a certain number of tabs to a given stringstream
  */
-std::string generic_tag::to_string(void) {
-	std::string out;
+void generic_tag::append_tabs(unsigned int tab, std::stringstream &ss) {
+	for(unsigned int i = 0; i < tab; ++i)
+		ss << "\t";
+}
 
-	// create string representation
-	out.append(type_to_string(type));
+/*
+ * Return a string representation of a generic tag
+ */
+std::string generic_tag::to_string(unsigned int tab) {
+	std::stringstream ss;
+
+	// form a string representation
+	append_tabs(tab, ss);
+	ss << type_to_string(type);
 	if(!name.empty())
-		out.append(": " + name);
-	return out;
+		ss << " " << name;
+	return ss.str();
 }
 
 /*
- * Returns a string representatrion of a tag type
+ * Return a string representation of a tag type
  */
-std::string generic_tag::type_to_string(char type) {
-	std::string out("[");
+std::string generic_tag::type_to_string(unsigned char type) {
+	std::stringstream ss;
+
+	// form a string representation
+	ss << "[";
 	switch(type) {
-		case END: out.append("END");
+		case END: ss << "END";
 			break;
-		case BYTE: out.append("BYTE");
+		case BYTE: ss << "BYTE";
 			break;
-		case SHORT: out.append("SHORT");
+		case SHORT: ss << "SHORT";
 			break;
-		case INT: out.append("INT");
+		case INT: ss << "INT";
 			break;
-		case LONG: out.append("LONG");
+		case LONG: ss << "LONG";
 			break;
-		case FLOAT: out.append("FLOAT");
+		case FLOAT: ss << "FLOAT";
 			break;
-		case DOUBLE: out.append("DOUBLE");
+		case DOUBLE: ss << "DOUBLE";
 			break;
-		case BYTE_ARRAY: out.append("BYTE ARRAY");
+		case BYTE_ARRAY: ss << "BYTE ARRAY";
 			break;
-		case STRING: out.append("STRING");
+		case STRING: ss << "STRING";
 			break;
-		case LIST: out.append("LIST");
+		case LIST: ss << "LIST";
 			break;
-		case COMPOUND: out.append("COMPOUND");
+		case COMPOUND: ss << "COMPOUND";
 			break;
-		case INT_ARRAY: out.append("INT ARRAY");
+		case INT_ARRAY: ss << "INT ARRAY";
 			break;
-		default: out.append("UNKNOWN");
+		default: ss << "UNKNOWN";
 			break;
 	}
-	out.append("]");
-	return out;
+	ss << "]";
+	return ss.str();
 }

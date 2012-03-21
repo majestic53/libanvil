@@ -20,66 +20,79 @@
 #ifndef INT_TAG_HPP_
 #define INT_TAG_HPP_
 
-#include <cstdint>
+#include <string>
+#include <vector>
 #include "generic_tag.hpp"
 
 class int_tag : public generic_tag {
+private:
+
+	/*
+	 * Integer tag value
+	 */
+	int value;
+
 public:
 
 	/*
-	 * Int tag value
+	 * Integer tag constructor
 	 */
-	int32_t value;
+	int_tag(void) : generic_tag(INT) { value = 0; }
 
 	/*
-	 * Int tag constructor
+	 * Integer tag constructor
 	 */
-	int_tag(void) : generic_tag(INT), value(0) { return; }
+	int_tag(const int_tag &other) : generic_tag(other.name, INT) { value = other.value; };
 
 	/*
-	 * Int tag constructor
+	 * Integer tag constructor
 	 */
-	int_tag(const int_tag &other) : generic_tag(other.name, INT), value(other.value) { return; }
+	int_tag(int value) : generic_tag(INT) { this->value = value; }
 
 	/*
-	 * Int tag constructor
+	 * Integer tag constructor
 	 */
-	int_tag(int32_t value) : generic_tag(INT), value(value) { return; }
+	int_tag(const std::string &name, int value) : generic_tag(name, INT) { this->value = value; }
 
 	/*
-	 * Int tag constructor
+	 * Integer tag destructor
 	 */
-	int_tag(const std::string &name, int32_t value) : generic_tag(name, INT), value(value) { return; }
+	virtual ~int_tag(void) { return; }
 
 	/*
-	 * Int tag destructor
-	 */
-	~int_tag(void) { return; }
-
-	/*
-	 * Int tag assignment
+	 * Integer tag assignment operator
 	 */
 	int_tag &operator=(const int_tag &other);
 
 	/*
-	 * Int tag equals
+	 * Integer tag equals operator
 	 */
-	bool operator==(const int_tag &other);
+	bool operator==(const generic_tag &other);
 
 	/*
-	 * Int tag not equals
+	 * Integer tag not-equals operator
 	 */
-	bool operator!=(const int_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Returns an int tags value
+	 * Return a integer tag's data
 	 */
-	void *get_value(void) { return &value; }
+	std::vector<char> get_data(void);
 
 	/*
-	 * Returns a string representation of an int tag
+	 * Return a integer tag's value
 	 */
-	std::string to_string(void);
+	int get_value(void) { return value; }
+
+	/*
+	 * Set a integer tag's value
+	 */
+	void set_value(int value) { this->value = value; }
+
+	/*
+	 * Return a string representation of a integer tag
+	 */
+	std::string to_string(unsigned int tab);
 };
 
 #endif

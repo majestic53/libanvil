@@ -20,65 +20,79 @@
 #ifndef FLOAT_TAG_HPP_
 #define FLOAT_TAG_HPP_
 
+#include <string>
+#include <vector>
 #include "generic_tag.hpp"
 
 class float_tag : public generic_tag {
-public:
+private:
 
 	/*
 	 * Float tag value
 	 */
 	float value;
 
-	/*
-	 * Float tag constructor
-	 */
-	float_tag(void) : generic_tag(FLOAT), value(0) { return; }
+public:
 
 	/*
 	 * Float tag constructor
 	 */
-	float_tag(const float_tag &other) : generic_tag(other.name, FLOAT), value(other.value) { return; }
+	float_tag(void) : generic_tag(FLOAT) { value = 0; }
 
 	/*
 	 * Float tag constructor
 	 */
-	float_tag(float value) : generic_tag(FLOAT), value(value) { return; }
+	float_tag(const float_tag &other) : generic_tag(other.name, FLOAT) { value = other.value; };
 
 	/*
 	 * Float tag constructor
 	 */
-	float_tag(const std::string &name, float value) : generic_tag(name, FLOAT), value(value) { return; }
+	float_tag(float value) : generic_tag(FLOAT) { this->value = value; }
+
+	/*
+	 * Float tag constructor
+	 */
+	float_tag(const std::string &name, float value) : generic_tag(name, FLOAT) { this->value = value; }
 
 	/*
 	 * Float tag destructor
 	 */
-	~float_tag(void) { return; }
+	virtual ~float_tag(void) { return; }
 
 	/*
-	 * Float tag assignment
+	 * Float tag assignment operator
 	 */
 	float_tag &operator=(const float_tag &other);
 
 	/*
-	 * Float tag equals
+	 * Float tag equals operator
 	 */
-	bool operator==(const float_tag &other);
+	bool operator==(const generic_tag &other);
 
 	/*
-	 * Float tag not equals
+	 * Float tag not-equals operator
 	 */
-	bool operator!=(const float_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) { return !(*this == other); }
 
 	/*
-	 * Returns a float tags value
+	 * Return a float tag's data
 	 */
-	void *get_value(void) { return &value; }
+	std::vector<char> get_data(void);
 
 	/*
-	 * Returns a string representation of a float tag
+	 * Return a float tag's value
 	 */
-	std::string to_string(void);
+	float get_value(void) { return value; }
+
+	/*
+	 * Set a float tag's value
+	 */
+	void set_value(float value) { this->value = value; }
+
+	/*
+	 * Return a string representation of a float tag
+	 */
+	std::string to_string(unsigned int tab);
 };
 
 #endif

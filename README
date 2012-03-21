@@ -78,8 +78,8 @@ Putting it all together:
 
 #include <cstdint>
 #include <iostream>
+#include <stdexcept>
 #include <vector>
-#include "region_file_exc.hpp"
 #include "region_file_reader.hpp"
 
 int main(int argc, char *argv[]) {
@@ -113,9 +113,9 @@ int main(int argc, char *argv[]) {
 
 
 	// catch all exception that may occur
-	} catch(region_file_exc &exc) {
-		std::cerr << exc.to_string() << std::endl;
-		return exc.get_exception();
+	} catch(std::runtime_error &exc) {
+		std::cerr << exc.what() << std::endl;
+		return 1;
 	}
 	return 0;
 }
