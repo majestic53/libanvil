@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 	// instantiate a file reader
 	region_file_reader reader;
 
-	// create vectors to hold block/height data (int32_t == int)
+	// create vectors to hold block/height data
 	std::vector<int> blocks, heights;
 
 	try {
