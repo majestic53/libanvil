@@ -17,8 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-
 #include "chunk_tag.hpp"
 #include "tag/byte_tag.hpp"
 #include "tag/byte_array_tag.hpp"
