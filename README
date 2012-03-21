@@ -59,7 +59,7 @@ or
 
 To read in block/heightmap data:
 
-	std::vector<int32_t> blocks, heights;
+	std::vector<int> blocks, heights;
 
 	...
 
@@ -76,7 +76,6 @@ Parsing block/heightmap data:
 
 Putting it all together:
 
-#include <cstdint>
 #include <iostream>
 #include <stdexcept>
 #include <vector>
@@ -88,7 +87,7 @@ int main(int argc, char *argv[]) {
 	region_file_reader reader;
 
 	// create vectors to hold block/height data (int32_t == int)
-	std::vector<int32_t> blocks, heights;
+	std::vector<int> blocks, heights;
 
 	try {
 
