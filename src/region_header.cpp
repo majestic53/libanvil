@@ -19,6 +19,7 @@
 
 #include <sstream>
 #include <stdexcept>
+#include "byte_stream.hpp"
 #include "region_header.hpp"
 
 /*
@@ -86,21 +87,16 @@ bool region_header::operator==(const region_header &other) {
  * Return a region header as character vector
  */
 std::vector<char> region_header::get_data(void) {
-	std::vector<char> data;
-	unsigned int offset, modified;
+	byte_stream stream(byte_stream::SWAP_ENDIAN);
 
 	// insert offsets
-	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i) {
-		offset = info[i].get_offset();
-		data.insert(data.end(), sizeof(int), *reinterpret_cast<const char *>(&offset));
-	}
+	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i)
+		stream << (int) info[i].get_offset();
 
 	// insert timestamps
-	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i) {
-		modified = info[i].get_modified();
-		data.insert(data.end(), sizeof(int), *reinterpret_cast<const char *>(&modified));
-	}
-	return data;
+	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i)
+		stream << (int) info[i].get_modified();
+	return stream.vbuf();
 }
 
 /*

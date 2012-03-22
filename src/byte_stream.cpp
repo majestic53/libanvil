@@ -76,28 +76,22 @@ bool byte_stream::operator==(const byte_stream &other) {
 /*
  * Byte stream input
  */
-bool byte_stream::operator<<(const std::string &input) {
+bool byte_stream::operator<<(std::vector<char> input) {
 
-	// append to the end of the stream
-	for(unsigned int i = 0; i < input.size(); ++i)
-		buff.push_back(input.at(i));
+	// append to the stream
+	buff.insert(buff.begin() + pos, input.begin(), input.end());
+	pos += input.size();
 	return true;
 }
 
 /*
- * Byte stream input (flag)
+ * Byte stream input
  */
-bool byte_stream::operator<<(int flag) {
+bool byte_stream::operator<<(const std::string input) {
 
-	// set state flags
-	switch(flag) {
-		case NO_SWAP_ENDIAN: swap = false;
-			break;
-		case SWAP_ENDIAN: swap = true;
-			break;
-		default: return false;
-			break;
-	}
+	// append to the stream
+	for(unsigned int i = 0; i < input.size(); ++i)
+		buff.insert(buff.begin() + pos++, input.at(i));
 	return true;
 }
 
@@ -191,15 +185,22 @@ unsigned int byte_stream::available(void) {
 }
 
 /*
+ * Clear the stream
+ */
+void byte_stream::clear(void) {
+	buff.clear();
+	pos = 0;
+}
+
+/*
  * Convert between endian types
  */
 void byte_stream::swap_endian(std::vector<char> &data) {
 	std::vector<char> rev;
-	rev.resize(data.size());
 
 	// reverse the order of elements
-	for(unsigned int i = 0; i < data.size(); ++i)
-		rev.at(rev.size() - i) = data.at(i);
+	for(int i = data.size() - 1; i >= 0; --i)
+		rev.push_back(data.at(i));
 	data = rev;
 }
 

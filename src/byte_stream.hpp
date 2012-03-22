@@ -75,11 +75,10 @@ private:
 		std::vector<char> data;
 
 		// assign type T from stream
-		unsigned int width = sizeof(T);
-		for(unsigned int i = 0; i < width; i++) {
+		for(unsigned int i = 0; i < sizeof(T); i++) {
 			if(available() == END_OF_STREAM)
 				return END_OF_STREAM;
-			data.push_back(buff[pos++]);
+			data.push_back(buff.at(pos++));
 		}
 		if(swap)
 			swap_endian(data);
@@ -90,7 +89,26 @@ private:
 	/*
 	 * Convert between endian types
 	 */
-	void swap_endian(std::vector<char> &data);
+	static void swap_endian(std::vector<char> &data);
+
+	/*
+	 * Write variable into byte stream
+	 * (char, short, int, long, float, double)
+	 */
+	template<class T>
+	unsigned int write_stream(T var) {
+		char *parts = NULL;
+		std::vector<char> data;
+
+		// convert to char array
+		parts = reinterpret_cast<char *>(&var);
+		data.insert(data.end(), parts, parts + sizeof(T));
+		if(swap)
+			swap_endian(data);
+		buff.insert(buff.begin() + pos, data.begin(), data.end());
+		pos += data.size();
+		return SUCCESS;
+	}
 
 public:
 
@@ -110,6 +128,11 @@ public:
 	 * Byte stream constructor
 	 */
 	byte_stream(void) : pos(0), swap(NO_SWAP_ENDIAN) { return; }
+
+	/*
+	 * Byte stream constructor
+	 */
+	byte_stream(unsigned int swap) : pos(0), swap(swap) { return; }
 
 	/*
 	 * Byte stream constructor
@@ -149,12 +172,42 @@ public:
 	/*
 	 * Byte stream input
 	 */
-	bool operator<<(const std::string &input);
+	bool operator<<(std::vector<char> input);
 
 	/*
-	 * Byte stream input (flag)
+	 * Byte stream input
 	 */
-	bool operator<<(int flag);
+	bool operator<<(const std::string input);
+
+	/*
+	 * Byte stream input
+	 */
+	bool operator<<(char input) { return write_stream<char>(input); }
+
+	/*
+	 * Byte stream input
+	 */
+	bool operator<<(short input) { return write_stream<short>(input); }
+
+	/*
+	 * Byte stream input
+	 */
+	bool operator<<(int input) { return write_stream<int>(input); }
+
+	/*
+	 * Byte stream input
+	 */
+	bool operator<<(long input) { return write_stream<long>(input); }
+
+	/*
+	 * Byte stream input
+	 */
+	bool operator<<(float input) { return write_stream<float>(input); }
+
+	/*
+	 * Byte stream input
+	 */
+	bool operator<<(double input) { return write_stream<double>(input); }
 
 	/*
 	 * Byte stream output
@@ -192,6 +245,11 @@ public:
 	unsigned int available(void);
 
 	/*
+	 * Clear the stream
+	 */
+	void clear(void);
+
+	/*
 	 * Returns the status of the stream
 	 */
 	bool good(void) { return available() != END_OF_STREAM; }
@@ -212,9 +270,19 @@ public:
 	const char *rdbuf(void) { return buff.data(); }
 
 	/*
+	 * Returns the entire contents of the stream buffer
+	 */
+	std::vector<char> vbuf(void) { return buff; }
+
+	/*
 	 * Resets the streams position
 	 */
 	void reset(void) { pos = 0; }
+
+	/*
+	 * Sets a streams swap status
+	 */
+	void set_swap(unsigned int swap) { this->swap = swap; }
 
 	/*
 	 * Returns the streams total size

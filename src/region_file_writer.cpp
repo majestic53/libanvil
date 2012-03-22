@@ -18,6 +18,11 @@
  */
 
 #include <sstream>
+#include <vector>
+#include <stdexcept>
+#include "chunk_info.hpp"
+#include "compression.hpp"
+#include "region_dim.hpp"
 #include "region_file_writer.hpp"
 
 /*
@@ -54,6 +59,6 @@ bool region_file_writer::operator==(const region_file_writer &other) {
  */
 void region_file_writer::write(void) {
 
-	// TODO: write to file
+	// TODO
 
 }

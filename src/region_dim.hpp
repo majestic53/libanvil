@@ -49,6 +49,11 @@ public:
 	static const unsigned int CHUNK_WIDTH = 32;
 
 	/*
+	 * Region file header offset
+	 */
+	static const unsigned int HEADER_OFFSET = 8192;
+
+	/*
 	 * Region file sector size
 	 */
 	static const unsigned int SECTOR_SIZE = 4096;

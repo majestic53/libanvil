@@ -18,6 +18,7 @@
  */
 
 #include <sstream>
+#include "../byte_stream.hpp"
 #include "compound_tag.hpp"
 #include "end_tag.hpp"
 
@@ -66,29 +67,17 @@ bool compound_tag::operator==(const generic_tag &other) {
  * Return a compound tag's data
  */
 std::vector<char> compound_tag::get_data(void)  {
-	short len;
-	unsigned int array_len;
-	const char *name, *name_len;
-	std::vector<char> data, sub_data;
 	end_tag end;
+	byte_stream stream(byte_stream::SWAP_ENDIAN);
 
 	// form data representation
-	len = this->name.size();
-	name = this->name.data();
-	array_len = this->value.size();
-	name_len = reinterpret_cast<const char *>(&len);
-	data.insert(data.end(), sizeof(type), *reinterpret_cast<const char *>(&type));
-	for(unsigned int i = 0; i < sizeof(len); ++i)
-		data.insert(data.end(), name_len[i]);
-	for(unsigned short i = 0; i < len; ++i)
-		data.insert(data.end(), name[i]);
-	for(unsigned int i = 0; i < array_len; ++i) {
-		sub_data = value.at(i)->get_data();
-		data.insert(data.end(), sub_data.begin(), sub_data.end());
-	}
-	sub_data = end.get_data();
-	data.insert(data.end(), sub_data.begin(), sub_data.end());
-	return data;
+	stream << (char) type;
+	stream << (short) name.size();
+	stream << name;
+	for(unsigned int i = 0; i < value.size(); ++i)
+		stream << value.at(i)->get_data();
+	stream << end.get_data();
+	return stream.vbuf();
 }
 
 /*

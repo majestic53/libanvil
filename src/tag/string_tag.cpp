@@ -18,6 +18,7 @@
  */
 
 #include <sstream>
+#include "../byte_stream.hpp"
 #include "string_tag.hpp"
 
 /*
@@ -60,27 +61,15 @@ bool string_tag::operator==(const generic_tag &other) {
  * Return a string tag's data
  */
 std::vector<char> string_tag::get_data(void)  {
-	short len, v_len;
-	const char *name, *name_len, *value, *value_len;
-	std::vector<char> data;
+	byte_stream stream(byte_stream::SWAP_ENDIAN);
 
 	// form data representation
-	len = this->name.size();
-	v_len = this->value.size();
-	name = this->name.data();
-	name_len = reinterpret_cast<const char *>(&len);
-	value = this->value.data();
-	value_len = reinterpret_cast<const char *>(&v_len);
-	data.insert(data.end(), sizeof(type), *reinterpret_cast<const char *>(&type));
-	for(unsigned int i = 0; i < sizeof(len); ++i)
-		data.insert(data.end(), name_len[i]);
-	for(unsigned short i = 0; i < len; ++i)
-		data.insert(data.end(), name[i]);
-	for(unsigned int i = 0; i < sizeof(v_len); ++i)
-		data.insert(data.end(), value_len[i]);
-	for(unsigned int i = 0; i < this->value.size(); ++i)
-		data.insert(data.end(), value[i]);
-	return data;
+	stream << (char) type;
+	stream << (short) name.size();
+	stream << name;
+	stream << (short) value.size();
+	stream << value;
+	return stream.vbuf();
 }
 
 /*

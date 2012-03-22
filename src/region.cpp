@@ -80,6 +80,21 @@ bool region::operator==(const region &other) {
 }
 
 /*
+ * Generate a new region
+ */
+void region::generate(int x, int z, region &reg) {
+
+	// cleanup old tags and assign new chunks
+	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i) {
+		reg.get_header().set_info_at(i, chunk_info());
+		reg.get_tag_at(i).clean_root();
+		reg.get_tag_at(i) = chunk_tag();
+	}
+	reg.set_x(x);
+	reg.set_z(z);
+}
+
+/*
  * Returns a region's tag at a given index
  */
 chunk_tag &region::get_tag_at(unsigned int index) {

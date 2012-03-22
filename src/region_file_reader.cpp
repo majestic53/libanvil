@@ -325,7 +325,7 @@ void region_file_reader::parse_chunk_tag(std::vector<char> &data, chunk_tag &tag
 
 	// setup bytestream
 	byte_stream bstream(data);
-	bstream << byte_stream::NO_SWAP_ENDIAN;
+	bstream.set_swap(byte_stream::NO_SWAP_ENDIAN);
 
 	// parse tags from root
 	type = read_value<char>(bstream);
@@ -358,7 +358,7 @@ void region_file_reader::read(void) {
 	// attempt to open file
 	file.open(path.c_str(), std::ios::in | std::ios::binary);
 	if(!file.is_open())
-		throw std::runtime_error("Failed to open file");
+		throw std::runtime_error("Failed to open input file");
 
 	// parse the filename for coordinants
 	boost::cmatch ref;

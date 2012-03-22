@@ -87,6 +87,11 @@ public:
 	bool operator!=(const region &other) { return !(*this == other); }
 
 	/*
+	 * Generate a new region
+	 */
+	static void generate(int x, int z, region &reg);
+
+	/*
 	 * Returns a region's header
 	 */
 	region_header &get_header(void) { return header; }
