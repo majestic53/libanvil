@@ -60,13 +60,15 @@ bool float_tag::operator==(const generic_tag &other) {
 /*
  * Return a float tag's data
  */
-std::vector<char> float_tag::get_data(void)  {
+std::vector<char> float_tag::get_data(bool list_ele)  {
 	byte_stream stream(byte_stream::SWAP_ENDIAN);
 
 	// form data representation
-	stream << (char) type;
-	stream << (short) name.size();
-	stream << name;
+	if(!list_ele) {
+		stream << (char) type;
+		stream << (short) name.size();
+		stream << name;
+	}
 	stream << value;
 	return stream.vbuf();
 }

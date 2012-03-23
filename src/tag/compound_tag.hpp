@@ -87,7 +87,7 @@ public:
 	/*
 	 * Return a compound tag's data
 	 */
-	std::vector<char> get_data(void);
+	std::vector<char> get_data(bool list_ele);
 
 	/*
 	 * Return a compound tag's value

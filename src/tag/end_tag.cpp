@@ -56,7 +56,7 @@ bool end_tag::operator==(const generic_tag &other) {
 /*
  * Return a end tag's data
  */
-std::vector<char> end_tag::get_data(void)  {
+std::vector<char> end_tag::get_data(bool list_ele)  {
 	std::vector<char> data;
 
 	// form data representation

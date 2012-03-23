@@ -42,12 +42,17 @@ public:
 	/*
 	 * Region file writer constructor
 	 */
+	region_file_writer(const region_file_writer &other) : region_file(other.path, other.reg) { return; }
+
+	/*
+	 * Region file writer constructor
+	 */
 	region_file_writer(const std::string &path) : region_file(path) { return; }
 
 	/*
 	 * Region file writer constructor
 	 */
-	region_file_writer(const region_file_writer &other) : region_file(other.path, other.reg) { return; }
+	region_file_writer(const std::string &path, const region &reg) : region_file(path, reg) { return; }
 
 	/*
 	 * Region file writer destructor

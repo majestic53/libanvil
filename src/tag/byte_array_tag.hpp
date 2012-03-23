@@ -92,7 +92,7 @@ public:
 	/*
 	 * Return a byte array tag's data
 	 */
-	std::vector<char> get_data(void);
+	std::vector<char> get_data(bool list_ele);
 
 	/*
 	 * Return a byte array tag's value

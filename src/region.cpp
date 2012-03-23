@@ -86,12 +86,47 @@ void region::generate(int x, int z, region &reg) {
 
 	// cleanup old tags and assign new chunks
 	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i) {
-		reg.get_header().set_info_at(i, chunk_info());
 		reg.get_tag_at(i).clean_root();
 		reg.get_tag_at(i) = chunk_tag();
+		reg.get_header().set_info_at(i, chunk_info(0, 0, chunk_info::ZLIB, 0));
 	}
 	reg.set_x(x);
 	reg.set_z(z);
+}
+
+
+/*
+ * Generate a new chunk in a region
+ */
+void region::generate_chunk(unsigned int x, unsigned int z, region &reg) {
+	unsigned char count;
+	unsigned int length, offset;
+	unsigned int pos = region_dim::HEADER_OFFSET;
+	unsigned int index = z * region_dim::CHUNK_WIDTH + x;
+
+	// check for valid index
+	if(index >= region_dim::CHUNK_COUNT)
+		throw std::out_of_range("index out-of-range");
+
+	// cleanup old tags and assign new chunk
+	reg.get_tag_at(index).clean_root();
+	reg.get_tag_at(index) = chunk_tag();
+
+	// TODO: add new subtags
+
+	// update header to reflect changes
+	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i) {
+
+		// skip over unfilled chunks
+		if(!reg.is_filled(i)
+				&& i != index)
+			continue;
+		length = reg.get_tag_at(i).get_data().size();
+		count = (length / region_dim::SECTOR_SIZE) + 1;
+		offset = pos / region_dim::SECTOR_SIZE;
+		reg.get_header().set_info_at(i, chunk_info((offset << 8) | count, length, chunk_info::ZLIB, 0));
+		pos += count * region_dim::SECTOR_SIZE;
+	}
 }
 
 /*
@@ -103,6 +138,17 @@ chunk_tag &region::get_tag_at(unsigned int index) {
 	if(index >= region_dim::CHUNK_COUNT)
 		throw std::out_of_range("index out-of-range");
 	return tags[index];
+}
+
+/*
+ * Returns a region's chunk filled status
+ */
+bool region::is_filled(unsigned int index) {
+
+	// check for valid index
+	if(index >= region_dim::CHUNK_COUNT)
+		throw std::out_of_range("index out-of-range");
+	return !header.get_info_at(index).empty();
 }
 
 /*

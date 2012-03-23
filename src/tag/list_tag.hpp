@@ -97,7 +97,7 @@ public:
 	/*
 	 * Return a list tag's data
 	 */
-	std::vector<char> get_data(void);
+	std::vector<char> get_data(bool list_ele);
 
 	/*
 	 * Returns a list tag's element type

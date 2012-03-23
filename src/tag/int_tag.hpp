@@ -77,7 +77,7 @@ public:
 	/*
 	 * Return a integer tag's data
 	 */
-	std::vector<char> get_data(void);
+	std::vector<char> get_data(bool list_ele);
 
 	/*
 	 * Return a integer tag's value

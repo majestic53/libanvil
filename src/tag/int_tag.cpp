@@ -60,13 +60,15 @@ bool int_tag::operator==(const generic_tag &other) {
 /*
  * Return a integer tag's data
  */
-std::vector<char> int_tag::get_data(void)  {
+std::vector<char> int_tag::get_data(bool list_ele)  {
 	byte_stream stream(byte_stream::SWAP_ENDIAN);
 
 	// form data representation
-	stream << (char) type;
-	stream << (short) name.size();
-	stream << name;
+	if(!list_ele) {
+		stream << (char) type;
+		stream << (short) name.size();
+		stream << name;
+	}
 	stream << value;
 	return stream.vbuf();
 }

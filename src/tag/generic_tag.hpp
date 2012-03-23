@@ -90,7 +90,7 @@ public:
 	/*
 	 * Return a generic tag's data
 	 */
-	virtual std::vector<char> get_data(void) { return this->get_data(); }
+	virtual std::vector<char> get_data(bool list_ele) { return this->get_data(list_ele); }
 
 	/*
 	 * Return a generic tag's name

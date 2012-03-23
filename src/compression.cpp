@@ -39,12 +39,12 @@ bool compression::deflate_(std::vector<char> &data) {
 
 	// deflate blocks
 	do {
-        zs.next_out = reinterpret_cast<Bytef *>(buff);
-        zs.avail_out = SEG_SIZE;
+		zs.next_out = reinterpret_cast<Bytef *>(buff);
+		zs.avail_out = SEG_SIZE;
 
-        // deflate data and place in out_data
-        ret = deflate(&zs, Z_FINISH);
-        out_data.insert(out_data.end(), buff, buff + zs.total_out);
+		// deflate data and place in out_data
+		ret = deflate(&zs, Z_FINISH);
+		out_data.insert(out_data.end(), buff, buff + zs.total_out);
 	} while(ret == Z_OK);
 
 	// check for errors
@@ -77,13 +77,13 @@ bool compression::inflate_(std::vector<char> &data) {
 
 	// inflate blocks
 	do {
-        zs.next_out = reinterpret_cast<Bytef *>(buff);
-        zs.avail_out = SEG_SIZE;
+		zs.next_out = reinterpret_cast<Bytef *>(buff);
+		zs.avail_out = SEG_SIZE;
 
-        // inflate data and place in out_data
-        ret = inflate(&zs, 0);
-        out_data.insert(out_data.end(), buff, buff + (zs.total_out - prev_out));
-        prev_out = zs.total_out;
+		// inflate data and place in out_data
+		ret = inflate(&zs, 0);
+		out_data.insert(out_data.end(), buff, buff + (zs.total_out - prev_out));
+		prev_out = zs.total_out;
 	} while(ret == Z_OK);
 
 	// check for errors

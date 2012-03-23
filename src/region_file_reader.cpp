@@ -81,7 +81,7 @@ char region_file_reader::get_biome_at(unsigned int x, unsigned int z, unsigned i
 		throw std::out_of_range("coordinates out-of-range");
 
 	// collect biome tags
-	biome = get_region().get_tag_at(pos).get_sub_tag_by_name("Biomes");
+	biome = reg.get_tag_at(pos).get_sub_tag_by_name("Biomes");
 	if(biome.empty())
 		return 0;
 	return static_cast<byte_array_tag *>(biome.at(0))->at(b_pos);
@@ -100,7 +100,7 @@ std::vector<char> region_file_reader::get_biomes_at(unsigned int x, unsigned int
 		throw std::out_of_range("coordinates out-of-range");
 
 	// collect biome tags
-	biome = get_region().get_tag_at(pos).get_sub_tag_by_name("Biomes");
+	biome = reg.get_tag_at(pos).get_sub_tag_by_name("Biomes");
 	if(biome.empty())
 		return biomes;
 	return static_cast<byte_array_tag *>(biome.at(0))->get_value();
@@ -117,7 +117,7 @@ int region_file_reader::get_block_at(unsigned int x, unsigned int z, unsigned in
 	// check coordinates
 	if(pos >= region_dim::CHUNK_COUNT)
 		throw std::out_of_range("coordinates out-of-range");
-	section = get_region().get_tag_at(pos).get_sub_tag_by_name("Blocks");
+	section = reg.get_tag_at(pos).get_sub_tag_by_name("Blocks");
 
 	// return an air block if no blocks exists in a given chunk
 	if(section.empty())
@@ -145,7 +145,7 @@ std::vector<int> region_file_reader::get_blocks_at(unsigned int x, unsigned int 
 	unsigned int pos = z * region_dim::CHUNK_WIDTH + x;
 
 	// retrieve chunk data
-	section = get_region().get_tag_at(pos).get_sub_tag_by_name("Blocks");
+	section = reg.get_tag_at(pos).get_sub_tag_by_name("Blocks");
 
 	// return an empty vector if no blocks exists in a given chunk
 	if(section.empty())
@@ -171,7 +171,7 @@ chunk_tag &region_file_reader::get_chunk_tag_at(unsigned int x, unsigned int z) 
 	// check coordinates
 	if(pos >= region_dim::CHUNK_COUNT)
 		throw std::out_of_range("coordinates out-of-range");
-	return get_region().get_tag_at(pos);
+	return reg.get_tag_at(pos);
 }
 
 /*
@@ -188,7 +188,7 @@ int region_file_reader::get_height_at(unsigned int x, unsigned int z, unsigned i
 		throw std::out_of_range("coordinates out-of-range");
 
 	// collect biome tags
-	height = get_region().get_tag_at(pos).get_sub_tag_by_name("HeightMap");
+	height = reg.get_tag_at(pos).get_sub_tag_by_name("HeightMap");
 	if(height.empty())
 		return 0;
 	return static_cast<int_array_tag *>(height.at(0))->at(b_pos);
@@ -207,7 +207,7 @@ std::vector<int> region_file_reader::get_heightmap_at(unsigned int x, unsigned i
 		throw std::out_of_range("coordinates out-of-range");
 
 	// collect biome tags
-	height = get_region().get_tag_at(pos).get_sub_tag_by_name("HeightMap");
+	height = reg.get_tag_at(pos).get_sub_tag_by_name("HeightMap");
 	if(height.empty())
 		return heights;
 	return static_cast<int_array_tag *>(height.at(0))->get_value();
@@ -222,7 +222,7 @@ bool region_file_reader::is_filled(unsigned int x, unsigned int z) {
 	// check coordinates
 	if(pos >= region_dim::CHUNK_COUNT)
 		throw std::out_of_range("coordinates out-of-range");
-	return !get_region().get_header().get_info_at(pos).empty();
+	return reg.is_filled(pos);
 }
 
 /*
@@ -361,18 +361,10 @@ void region_file_reader::read(void) {
 		throw std::runtime_error("Failed to open input file");
 
 	// parse the filename for coordinants
-	boost::cmatch ref;
-	std::stringstream stream;
-	std::string name = path.substr(path.find_last_of('/') + 1);
-	if(!boost::regex_match(name.c_str(), ref, PATTERN))
+	if(!is_region_file(path, x, z))
 		throw std::runtime_error("Malformated region filename");
-	stream << ref[1];
-	stream >> x;
-	stream.clear();
-	stream << ref[2];
-	stream >> z;
-	get_region().set_x(x);
-	get_region().set_z(z);
+	reg.set_x(x);
+	reg.set_z(z);
 
 	// read header data
 	read_header();
@@ -396,7 +388,7 @@ void region_file_reader::read_chunks(void) {
 
 	// iterate though header entries, reading in chunks if they exist
 	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i) {
-		info = get_region().get_header().get_info_at(i);
+		info = reg.get_header().get_info_at(i);
 
 		// skip empty chunks
 		if(info.empty())
@@ -423,7 +415,7 @@ void region_file_reader::read_chunks(void) {
 		}
 
 		// use data to fill chunk tag
-		parse_chunk_tag(raw_vec, get_region().get_tag_at(i));
+		parse_chunk_tag(raw_vec, reg.get_tag_at(i));
 	}
 }
 

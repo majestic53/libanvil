@@ -77,7 +77,7 @@ public:
 	/*
 	 * Return a byte tag's data
 	 */
-	std::vector<char> get_data(void);
+	std::vector<char> get_data(bool list_ele);
 
 	/*
 	 * Return a byte tag's value

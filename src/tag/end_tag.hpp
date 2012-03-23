@@ -60,7 +60,7 @@ public:
 	/*
 	 * Return a end tag's data
 	 */
-	std::vector<char> get_data(void);
+	std::vector<char> get_data(bool list_ele);
 
 	/*
 	 * Return a string representation of a end tag

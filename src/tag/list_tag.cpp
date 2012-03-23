@@ -65,17 +65,19 @@ bool list_tag::operator==(const generic_tag &other) {
 /*
  * Return a list tag's data
  */
-std::vector<char> list_tag::get_data(void)  {
+std::vector<char> list_tag::get_data(bool list_ele)  {
 	byte_stream stream(byte_stream::SWAP_ENDIAN);
 
 	// form data representation
-	stream << (char) type;
-	stream << (short) name.size();
-	stream << name;
+	if(!list_ele) {
+		stream << (char) type;
+		stream << (short) name.size();
+		stream << name;
+	}
 	stream << (char) ele_type;
 	stream << (int) value.size();
 	for(unsigned int i = 0; i < value.size(); ++i)
-		stream << value.at(i)->get_data();
+		stream << value.at(i)->get_data(true);
 	return stream.vbuf();
 }
 
@@ -110,13 +112,13 @@ std::string list_tag::to_string(unsigned int tab) {
 	std::stringstream ss;
 
 	// form string representation
-	ss << generic_tag::to_string(tab);
+	ss << generic_tag::to_string(tab) << " (" << value.size() << ") {";
 	if(!value.empty()) {
-		ss << " (" << value.size() << ") {" << std::endl;
+		ss << std::endl;
 		for(unsigned int i = 0; i < value.size(); ++i)
 			ss << value.at(i)->to_string(tab + 1) << std::endl;
 		generic_tag::append_tabs(tab, ss);
-		ss << "}";
 	}
+	ss << "}";
 	return ss.str();
 }

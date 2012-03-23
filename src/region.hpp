@@ -92,6 +92,11 @@ public:
 	static void generate(int x, int z, region &reg);
 
 	/*
+	 * Generate a new chunk in a region
+	 */
+	static void generate_chunk(unsigned int x, unsigned int z, region &reg);
+
+	/*
 	 * Returns a region's header
 	 */
 	region_header &get_header(void) { return header; }
@@ -115,6 +120,11 @@ public:
 	 * Returns a region's z coordinate
 	 */
 	int get_z(void) { return z; }
+
+	/*
+	 * Returns a region's chunk filled status
+	 */
+	bool is_filled(unsigned int index);
 
 	/*
 	 * Sets a region's header

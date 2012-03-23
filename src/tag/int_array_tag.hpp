@@ -92,7 +92,7 @@ public:
 	/*
 	 * Return a integer array tag's data
 	 */
-	std::vector<char> get_data(void);
+	std::vector<char> get_data(bool list_ele);
 
 	/*
 	 * Return a integer array tag's value

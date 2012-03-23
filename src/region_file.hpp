@@ -106,6 +106,11 @@ public:
 	void generate(int x, int z) { region::generate(x, z, reg); }
 
 	/*
+	 * Generate a ne chunk in a region
+	 */
+	void generate_chunk(unsigned int x, unsigned int z) { region::generate_chunk(x, z, reg); };
+
+	/*
 	 * Returns a region file's path
 	 */
 	std::string &get_path(void) { return path; }

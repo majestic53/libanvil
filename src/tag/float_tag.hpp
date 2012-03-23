@@ -77,7 +77,7 @@ public:
 	/*
 	 * Return a float tag's data
 	 */
-	std::vector<char> get_data(void);
+	std::vector<char> get_data(bool list_ele);
 
 	/*
 	 * Return a float tag's value

@@ -195,8 +195,8 @@ void byte_stream::clear(void) {
 /*
  * Convert between endian types
  */
-void byte_stream::swap_endian(std::vector<char> &data) {
-	std::vector<char> rev;
+void byte_stream::swap_endian(std::vector<unsigned char> &data) {
+	std::vector<unsigned char> rev;
 
 	// reverse the order of elements
 	for(int i = data.size() - 1; i >= 0; --i)

@@ -88,7 +88,7 @@ public:
 	/*
 	 * Return a chunk tag's root tag data
 	 */
-	std::vector<char> get_data(void) { return root.get_data(); }
+	std::vector<char> get_data(void) { return root.get_data(false); }
 
 	/*
 	 * Return a chunk tag's root tag

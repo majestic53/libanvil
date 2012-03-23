@@ -60,13 +60,15 @@ bool byte_tag::operator==(const generic_tag &other) {
 /*
  * Return a byte tag's data
  */
-std::vector<char> byte_tag::get_data(void)  {
+std::vector<char> byte_tag::get_data(bool list_ele)  {
 	byte_stream stream(byte_stream::SWAP_ENDIAN);
 
 	// form data representation
-	stream << (char) type;
-	stream << (short) name.size();
-	stream << name;
+	if(!list_ele) {
+		stream << (char) type;
+		stream << (short) name.size();
+		stream << name;
+	}
 	stream << value;
 	return stream.vbuf();
 }

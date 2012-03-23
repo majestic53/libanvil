@@ -60,13 +60,15 @@ bool string_tag::operator==(const generic_tag &other) {
 /*
  * Return a string tag's data
  */
-std::vector<char> string_tag::get_data(void)  {
+std::vector<char> string_tag::get_data(bool list_ele)  {
 	byte_stream stream(byte_stream::SWAP_ENDIAN);
 
 	// form data representation
-	stream << (char) type;
-	stream << (short) name.size();
-	stream << name;
+	if(!list_ele) {
+		stream << (char) type;
+		stream << (short) name.size();
+		stream << name;
+	}
 	stream << (short) value.size();
 	stream << value;
 	return stream.vbuf();

@@ -48,11 +48,11 @@ private:
 	 */
 	template<class T>
 	unsigned int read_stream(T &var) {
-		std::vector<char> data;
+		std::vector<unsigned char> data;
 
 		// assign type T from stream
 		unsigned int width = sizeof(T);
-		for(unsigned int i = 0; i < width; i++) {
+		for(unsigned int i = 0; i < width; ++i) {
 			if(available() == END_OF_STREAM)
 				return END_OF_STREAM;
 			data.push_back(buff.at(pos++));
@@ -60,9 +60,8 @@ private:
 		if(swap)
 			swap_endian(data);
 		var = 0;
-		for(unsigned int i = 0; i < width - 1; i++)
-			var |= data.at(i) << 8 * ((width - 1) - i);
-		var |= data.at(width - 1);
+		for(unsigned int i = 0; i < width; ++i)
+			var |= (data.at(i) << (8 * ((width - 1) - i)));
 		return SUCCESS;
 	}
 
@@ -72,10 +71,10 @@ private:
 	 */
 	template<class T>
 	unsigned int read_stream_float(T &var) {
-		std::vector<char> data;
+		std::vector<unsigned char> data;
 
 		// assign type T from stream
-		for(unsigned int i = 0; i < sizeof(T); i++) {
+		for(unsigned int i = 0; i < sizeof(T); ++i) {
 			if(available() == END_OF_STREAM)
 				return END_OF_STREAM;
 			data.push_back(buff.at(pos++));
@@ -89,7 +88,7 @@ private:
 	/*
 	 * Convert between endian types
 	 */
-	static void swap_endian(std::vector<char> &data);
+	static void swap_endian(std::vector<unsigned char> &data);
 
 	/*
 	 * Write variable into byte stream
@@ -98,7 +97,7 @@ private:
 	template<class T>
 	unsigned int write_stream(T var) {
 		char *parts = NULL;
-		std::vector<char> data;
+		std::vector<unsigned char> data;
 
 		// convert to char array
 		parts = reinterpret_cast<char *>(&var);
@@ -250,6 +249,11 @@ public:
 	void clear(void);
 
 	/*
+	 * Returns the current position of the stream
+	 */
+	unsigned int get_position(void) { return pos; }
+
+	/*
 	 * Returns the status of the stream
 	 */
 	bool good(void) { return available() != END_OF_STREAM; }
@@ -258,11 +262,6 @@ public:
 	 * Returns the endian swap status of the stream
 	 */
 	bool is_swap(void) { return swap; }
-
-	/*
-	 * Returns the current position of the stream
-	 */
-	unsigned int position(void) { return pos; }
 
 	/*
 	 * Returns the entire contents of the stream buffer
@@ -278,6 +277,11 @@ public:
 	 * Resets the streams position
 	 */
 	void reset(void) { pos = 0; }
+
+	/*
+	 * Sets a streams position
+	 */
+	void set_position(unsigned int pos) { this->pos = pos; }
 
 	/*
 	 * Sets a streams swap status
