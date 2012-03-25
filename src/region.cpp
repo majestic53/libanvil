@@ -41,7 +41,7 @@ region::region(const region &other) : header(other.header), x(x), z(z) {
 
 	// assign attributes
 	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i)
-		tags[i].copy((chunk_tag &) other.tags[i]);
+		tags[i] = other.tags[i];
 }
 
 /*
@@ -51,7 +51,7 @@ region::region(int x, int z, const region_header &header, const chunk_tag (&tags
 
 	// assign attributes
 	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i)
-		this->tags[i].copy((chunk_tag &) tags[i]);
+		this->tags[i] = tags[i];
 }
 
 /*
@@ -66,7 +66,7 @@ region &region::operator=(const region &other) {
 	// assign attributes
 	header = other.header;
 	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i)
-		tags[i].copy((chunk_tag &) other.tags[i]);
+		tags[i] = other.tags[i];
 	x = other.x;
 	z = other.z;
 	return *this;
