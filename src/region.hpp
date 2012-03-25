@@ -87,6 +87,11 @@ public:
 	bool operator!=(const region &other) { return !(*this == other); }
 
 	/*
+	 * Copy another region
+	 */
+	void copy(region &other);
+
+	/*
 	 * Generate a new region
 	 */
 	static void generate(int x, int z, region &reg);

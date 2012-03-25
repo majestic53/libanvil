@@ -118,7 +118,7 @@ public:
 	/*
 	 * Returns a region file's region
 	 */
-	region &get_region(void) { return reg; }
+	region get_region(void) { return region(reg); }
 
 	/*
 	 * Returns true if a specified path is a region file

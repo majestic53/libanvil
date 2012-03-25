@@ -47,6 +47,11 @@ public:
 	/*
 	 * Short tag constructor
 	 */
+	short_tag(const std::string &name) : generic_tag(name, SHORT) { value = 0; }
+
+	/*
+	 * Short tag constructor
+	 */
 	short_tag(short value) : generic_tag(SHORT) { this->value = value; }
 
 	/*

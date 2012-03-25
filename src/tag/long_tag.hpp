@@ -47,6 +47,11 @@ public:
 	/*
 	 * Long tag constructor
 	 */
+	long_tag(const std::string &name) : generic_tag(name, LONG) { value = 0; }
+
+	/*
+	 * Long tag constructor
+	 */
 	long_tag(long value) : generic_tag(LONG) { this->value = value; }
 
 	/*

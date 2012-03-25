@@ -47,6 +47,11 @@ public:
 	/*
 	 * Byte array tag constructor
 	 */
+	byte_array_tag(const std::string &name) : generic_tag(name, BYTE_ARRAY) { return; }
+
+	/*
+	 * Byte array tag constructor
+	 */
 	byte_array_tag(std::vector<char> value) : generic_tag(BYTE_ARRAY) { this->value = value; }
 
 	/*

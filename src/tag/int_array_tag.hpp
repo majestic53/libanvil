@@ -47,6 +47,11 @@ public:
 	/*
 	 * Integer array tag constructor
 	 */
+	int_array_tag(const std::string &name) : generic_tag(name, INT_ARRAY) { return; }
+
+	/*
+	 * Integer array tag constructor
+	 */
 	int_array_tag(std::vector<int> value) : generic_tag(INT_ARRAY) { this->value = value; }
 
 	/*

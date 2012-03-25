@@ -86,6 +86,28 @@ public:
 	static void clean_tag(generic_tag *tag);
 
 	/*
+	 * Copy chunk tag
+	 */
+	void copy(chunk_tag &other);
+
+	/*
+	 * Copy chunk tag (recursively)
+	 */
+	static generic_tag *copy_tag(generic_tag *src);
+
+	/*
+	 * Copy chunk tag helper
+	 */
+	template <class T>
+	static T *copy_tag_helper(generic_tag *src) {
+		T *src_tag = static_cast<T *>(src), *dest_tag = NULL;
+
+		// assign attributes
+		dest_tag = new T(src_tag->get_name(), src_tag->get_value());
+		return dest_tag;
+	}
+
+	/*
 	 * Return a chunk tag's root tag data
 	 */
 	std::vector<char> get_data(void) { return root.get_data(false); }

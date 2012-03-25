@@ -176,7 +176,7 @@ public:
 	/*
 	 * Byte stream input
 	 */
-	bool operator<<(const std::string input);
+	bool operator<<(const std::string &input);
 
 	/*
 	 * Byte stream input

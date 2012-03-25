@@ -47,6 +47,11 @@ public:
 	/*
 	 * Float tag constructor
 	 */
+	float_tag(const std::string &name) : generic_tag(name, FLOAT) { value = 0; }
+
+	/*
+	 * Float tag constructor
+	 */
 	float_tag(float value) : generic_tag(FLOAT) { this->value = value; }
 
 	/*

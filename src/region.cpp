@@ -20,6 +20,19 @@
 #include <sstream>
 #include <stdexcept>
 #include "region.hpp"
+#include "tag/byte_tag.hpp"
+#include "tag/byte_array_tag.hpp"
+#include "tag/compound_tag.hpp"
+#include "tag/double_tag.hpp"
+#include "tag/end_tag.hpp"
+#include "tag/float_tag.hpp"
+#include "tag/generic_tag.hpp"
+#include "tag/int_tag.hpp"
+#include "tag/int_array_tag.hpp"
+#include "tag/list_tag.hpp"
+#include "tag/long_tag.hpp"
+#include "tag/short_tag.hpp"
+#include "tag/string_tag.hpp"
 
 /*
  * Region constructor
@@ -28,7 +41,7 @@ region::region(const region &other) : header(other.header), x(x), z(z) {
 
 	// assign attributes
 	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i)
-		tags[i] = other.tags[i];
+		tags[i].copy((chunk_tag &) other.tags[i]);
 }
 
 /*
@@ -38,7 +51,7 @@ region::region(int x, int z, const region_header &header, const chunk_tag (&tags
 
 	// assign attributes
 	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i)
-		this->tags[i] = tags[i];
+		this->tags[i].copy((chunk_tag &) tags[i]);
 }
 
 /*
@@ -53,7 +66,7 @@ region &region::operator=(const region &other) {
 	// assign attributes
 	header = other.header;
 	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i)
-		tags[i] = other.tags[i];
+		tags[i].copy((chunk_tag &) other.tags[i]);
 	x = other.x;
 	z = other.z;
 	return *this;
@@ -112,7 +125,40 @@ void region::generate_chunk(unsigned int x, unsigned int z, region &reg) {
 	reg.get_tag_at(index).clean_root();
 	reg.get_tag_at(index) = chunk_tag();
 
-	// TODO: add new subtags
+	// generate new sub-tags
+	compound_tag *level = new compound_tag("Level");
+	list_tag *entities = new list_tag("Entities", generic_tag::COMPOUND),
+			*tile_entities = new list_tag("TileEntities", generic_tag::COMPOUND),
+			*sections = new list_tag("Sections", generic_tag::COMPOUND);
+	byte_array_tag *biomes = new byte_array_tag("Biomes");
+	long_tag *last_updated = new long_tag("LastUpdate");
+	int_tag *x_pos = new int_tag("xPos"),
+			*z_pos = new int_tag("zPos");
+	byte_tag *terrain_populated = new byte_tag("TerrainPopulated");
+	int_array_tag *height_map = new int_array_tag("HeightMap");
+	if(!level
+			|| !entities
+			|| !tile_entities
+			|| !sections
+			|| !biomes
+			|| !last_updated
+			|| !x_pos
+			|| !z_pos
+			|| !terrain_populated
+			|| !height_map)
+		throw std::runtime_error("Failed to allocate new tag(s)");
+
+	// assign new sub-tags to root
+	level->push_back(entities);
+	level->push_back(biomes);
+	level->push_back(last_updated);
+	level->push_back(x_pos);
+	level->push_back(z_pos);
+	level->push_back(tile_entities);
+	level->push_back(terrain_populated);
+	level->push_back(height_map);
+	level->push_back(sections);
+	reg.get_tag_at(index).get_root_tag().push_back(level);
 
 	// update header to reflect changes
 	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i) {

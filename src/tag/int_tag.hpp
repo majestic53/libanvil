@@ -47,6 +47,11 @@ public:
 	/*
 	 * Integer tag constructor
 	 */
+	int_tag(const std::string &name) : generic_tag(name, INT) { value = 0; }
+
+	/*
+	 * Integer tag constructor
+	 */
 	int_tag(int value) : generic_tag(INT) { this->value = value; }
 
 	/*

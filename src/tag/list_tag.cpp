@@ -34,6 +34,7 @@ list_tag &list_tag::operator=(const list_tag &other) {
 	name = other.name;
 	type = other.type;
 	value = other.value;
+	ele_type = other.ele_type;
 	return *this;
 }
 

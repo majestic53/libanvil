@@ -87,7 +87,7 @@ bool byte_stream::operator<<(std::vector<char> input) {
 /*
  * Byte stream input
  */
-bool byte_stream::operator<<(const std::string input) {
+bool byte_stream::operator<<(const std::string &input) {
 
 	// append to the stream
 	for(unsigned int i = 0; i < input.size(); ++i)

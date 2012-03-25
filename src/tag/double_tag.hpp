@@ -47,6 +47,11 @@ public:
 	/*
 	 * Double tag constructor
 	 */
+	double_tag(const std::string &name) : generic_tag(name, DOUBLE) { value = 0; }
+
+	/*
+	 * Double tag constructor
+	 */
 	double_tag(double value) : generic_tag(DOUBLE) { this->value = value; }
 
 	/*

@@ -17,10 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdexcept>
 #include "chunk_tag.hpp"
 #include "tag/byte_tag.hpp"
 #include "tag/byte_array_tag.hpp"
-#include "tag/compound_tag.hpp"
 #include "tag/double_tag.hpp"
 #include "tag/end_tag.hpp"
 #include "tag/float_tag.hpp"
@@ -56,6 +56,73 @@ bool chunk_tag::operator==(const chunk_tag &other) {
 
 	// check attributes
 	return root == other.root;
+}
+
+/*
+ * Copy chunk tag
+ */
+void chunk_tag::copy(chunk_tag &other) {
+	std::vector<generic_tag *> value;
+
+	// clear old tag and assign new tag
+	clean_root();
+	root.set_name(other.get_root_tag().get_name());
+	value = other.get_root_tag().get_value();
+	for(unsigned int i = 0; i < value.size(); ++i) {
+		generic_tag *sub_tag = NULL;
+		sub_tag = copy_tag(value.at(i));
+		if(!sub_tag)
+			throw std::runtime_error("Failed to copy tag");
+		else
+			root.push_back(sub_tag);
+	}
+}
+
+/*
+ * Copy chunk tag (recursively)
+ */
+generic_tag *chunk_tag::copy_tag(generic_tag *src) {
+	generic_tag *tag = NULL;
+
+	// copy tag based on type
+	switch(src->type) {
+		case generic_tag::COMPOUND: {
+			compound_tag *cmp = static_cast<compound_tag *>(src);
+			compound_tag *c_cmp = new compound_tag(cmp->get_name());
+			for(unsigned int i = 0; i < cmp->size(); ++i)
+				c_cmp->push_back(copy_tag(cmp->at(i)));
+			tag = c_cmp;
+		} break;
+		case generic_tag::LIST: {
+			list_tag *lst = static_cast<list_tag *>(src);
+			list_tag *c_lst = new list_tag(lst->get_name(), lst->get_element_type());
+			for(unsigned int i = 0; i < lst->size(); ++i)
+				c_lst->push_back(copy_tag(lst->at(i)));
+			tag = c_lst;
+		} break;
+		default:
+			case generic_tag::END: tag = new end_tag();
+				break;
+			case generic_tag::BYTE: tag = copy_tag_helper<byte_tag>(src);
+				break;
+			case generic_tag::SHORT: tag = copy_tag_helper<short_tag>(src);
+				break;
+			case generic_tag::INT: tag = copy_tag_helper<int_tag>(src);
+				break;
+			case generic_tag::LONG: tag = copy_tag_helper<long_tag>(src);
+				break;
+			case generic_tag::FLOAT: tag = copy_tag_helper<float_tag>(src);
+				break;
+			case generic_tag::DOUBLE: tag = copy_tag_helper<double_tag>(src);
+				break;
+			case generic_tag::BYTE_ARRAY: tag = copy_tag_helper<byte_array_tag>(src);
+				break;
+			case generic_tag::STRING: tag = copy_tag_helper<string_tag>(src);
+				break;
+			case generic_tag::INT_ARRAY: tag = copy_tag_helper<int_array_tag>(src);
+				break;
+	}
+	return tag;
 }
 
 /*
