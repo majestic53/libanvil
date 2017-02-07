@@ -9,18 +9,18 @@ Ok, so this is a buggy first release. The only informations on "Anvil" at the mo
 
 What It Can Do
 ==============
-	* Open Minecraft "Anvil" map files (.mca)
-	* Retrieve various bits of data (per chunk):
-		* Biome data at a given x, z coord
-		* HeightMap data at a given x, z coord
-		* Block data at a given x, y, z coord
-		* (or any tag with a known name)
+* Open Minecraft "Anvil" map files (.mca)
+* Retrieve various bits of data (per chunk):
+	* Biome data at a given x, z coord
+	* HeightMap data at a given x, z coord
+	* Block data at a given x, y, z coord
+	* (or any tag with a known name)
 
 What It Can't Do (at the moment)
 ================================
-	* Read extended block ids (ie. those blocks that use the "AddBlocks" tag)
-		* This will be fixed soon, once more information becomes available!
-	* Create/Write .mca files
+* Read extended block ids (ie. those blocks that use the "AddBlocks" tag)
+	* This will be fixed soon, once more information becomes available!
+* Create/Write .mca files
 
 Building
 ========
@@ -28,10 +28,10 @@ Building
 Instructions for compiling libanvil from source code
 
 ###Requirements (tested on)
-	* g++ 4.4.3 or newer
-	* make 3.8 or newer
-	* boost regex 1.42 or newer
-	* zlib 1.2.3.3 or newer
+* g++ 4.4.3 or newer
+* make 3.8 or newer
+* boost regex 1.42 or newer
+* zlib 1.2.3.3 or newer
 
 ###For Debian
 ```
