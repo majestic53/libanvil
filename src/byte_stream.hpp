@@ -201,6 +201,11 @@ public:
 	/*
 	 * Byte stream input
 	 */
+	bool operator<<(long long input) { return write_stream<long long>(input); }
+
+	/*
+	 * Byte stream input
+	 */
 	bool operator<<(float input) { return write_stream<float>(input); }
 
 	/*
@@ -227,6 +232,11 @@ public:
 	 * Byte stream output
 	 */
 	bool operator>>(long &output);
+
+	/*
+	 * Byte stream output
+	 */
+	bool operator>>(long long &output);
 
 	/*
 	 * Byte stream output

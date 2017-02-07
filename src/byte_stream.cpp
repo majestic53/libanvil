@@ -151,6 +151,19 @@ bool byte_stream::operator>>(long &output) {
 /*
  * Byte stream output
  */
+bool byte_stream::operator>>(long long &output) {
+
+	// check if end of stream is reached
+	if(available() == END_OF_STREAM)
+		return END_OF_STREAM;
+
+	// read short from stream
+	return read_stream<long long>(output);
+}
+
+/*
+ * Byte stream output
+ */
 bool byte_stream::operator>>(float &output) {
 
 	// check if end of stream is reached
