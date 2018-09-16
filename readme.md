@@ -106,6 +106,7 @@ int main(int argc, char *argv[]) {
 
 		// open a region file
 		reader = region_file_reader("path-to-region-file");
+		reader.read();
 
 		// iterate through all possible chunks within a region
 		for(unsigned int z = 0; z < 32; ++z)
