@@ -18,8 +18,8 @@
  */
 
 #include <sstream>
-#include "../byte_stream.hpp"
-#include "list_tag.hpp"
+#include "../../include/byte_stream.h"
+#include "../../include/tag/list_tag.h"
 
 /*
  * List tag assignment operator

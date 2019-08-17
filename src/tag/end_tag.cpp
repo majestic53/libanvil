@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "end_tag.hpp"
+#include "../../include/tag/end_tag.h"
 
 /*
  * End tag assignment operator

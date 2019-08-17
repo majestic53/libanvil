@@ -1,6 +1,6 @@
 /*
- * compression.hpp
- * Copyright (C) 2012 David Jolly
+ * compression.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPRESSION_HPP_
-#define COMPRESSION_HPP_
+#ifndef COMPRESSION_H_
+#define COMPRESSION_H_
 
 #include <vector>
 
@@ -41,4 +41,4 @@ public:
 	static bool inflate_(std::vector<char> &data);
 };
 
-#endif
+#endif // COMPRESSION_H_

@@ -18,8 +18,8 @@
  */
 
 #include <sstream>
-#include "../byte_stream.hpp"
-#include "int_tag.hpp"
+#include "../../include/byte_stream.h"
+#include "../../include/tag/int_tag.h"
 
 /*
  * Integer tag assignment operator

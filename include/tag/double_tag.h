@@ -1,6 +1,6 @@
 /*
- * double_tag.hpp
- * Copyright (C) 2012 David Jolly
+ * double_tag.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,12 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DOUBLE_TAG_HPP_
-#define DOUBLE_TAG_HPP_
+#ifndef DOUBLE_TAG_H_
+#define DOUBLE_TAG_H_
 
 #include <string>
 #include <vector>
-#include "generic_tag.hpp"
+#include "generic_tag.h"
 
 class double_tag : public generic_tag {
 private:
@@ -100,4 +100,4 @@ public:
 	std::string to_string(unsigned int tab);
 };
 
-#endif
+#endif // DOUBLE_TAG_H_

@@ -18,18 +18,18 @@
  */
 
 #include <stdexcept>
-#include "chunk_tag.hpp"
-#include "tag/byte_tag.hpp"
-#include "tag/byte_array_tag.hpp"
-#include "tag/double_tag.hpp"
-#include "tag/end_tag.hpp"
-#include "tag/float_tag.hpp"
-#include "tag/int_tag.hpp"
-#include "tag/int_array_tag.hpp"
-#include "tag/list_tag.hpp"
-#include "tag/long_tag.hpp"
-#include "tag/short_tag.hpp"
-#include "tag/string_tag.hpp"
+#include "../include/chunk_tag.h"
+#include "../include/tag/byte_tag.h"
+#include "../include/tag/byte_array_tag.h"
+#include "../include/tag/double_tag.h"
+#include "../include/tag/end_tag.h"
+#include "../include/tag/float_tag.h"
+#include "../include/tag/int_tag.h"
+#include "../include/tag/int_array_tag.h"
+#include "../include/tag/list_tag.h"
+#include "../include/tag/long_tag.h"
+#include "../include/tag/short_tag.h"
+#include "../include/tag/string_tag.h"
 
 /*
  * Chunk tag assignment operator

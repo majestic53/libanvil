@@ -1,6 +1,6 @@
 /*
- * chunk_tag.hpp
- * Copyright (C) 2012 David Jolly
+ * chunk_tag.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,13 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CHUNK_TAG_HPP_
-#define CHUNK_TAG_HPP_
+#ifndef CHUNK_TAG_H_
+#define CHUNK_TAG_H_
 
 #include <string>
 #include <vector>
-#include "tag/compound_tag.hpp"
-#include "tag/generic_tag.hpp"
+#include "tag/compound_tag.h"
+#include "tag/generic_tag.h"
 
 class chunk_tag {
 private:
@@ -133,4 +133,4 @@ public:
 	std::string to_string(void) { return root.to_string(0); }
 };
 
-#endif
+#endif // CHUNK_TAG_H_

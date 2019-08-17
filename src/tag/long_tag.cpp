@@ -18,8 +18,8 @@
  */
 
 #include <sstream>
-#include "../byte_stream.hpp"
-#include "long_tag.hpp"
+#include "../../include/byte_stream.h"
+#include "../../include/tag/long_tag.h"
 
 /*
  * Long tag assignment operator

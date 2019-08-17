@@ -19,8 +19,8 @@
 
 #include <sstream>
 #include <stdexcept>
-#include "byte_stream.hpp"
-#include "region_header.hpp"
+#include "../include/byte_stream.h"
+#include "../include/region_header.h"
 
 /*
  * Region header constructor

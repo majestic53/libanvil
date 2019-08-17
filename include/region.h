@@ -1,6 +1,6 @@
 /*
- * region.hpp
- * Copyright (C) 2012 David Jolly
+ * region.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,14 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REGION_HPP_
-#define REGION_HPP_
+#ifndef REGION_H_
+#define REGION_H_
 
 #include <string>
 #include <vector>
-#include "chunk_tag.hpp"
-#include "region_dim.hpp"
-#include "region_header.hpp"
+#include "chunk_tag.h"
+#include "region_dim.h"
+#include "region_header.h"
 
 class region {
 private:
@@ -157,4 +157,4 @@ public:
 	std::string to_string(void);
 };
 
-#endif
+#endif // REGION_H_

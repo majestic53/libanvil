@@ -1,6 +1,6 @@
 /*
- * region_header.hpp
- * Copyright (C) 2012 David Jolly
+ * region_header.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,13 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REGION_HEADER_HPP_
-#define REGION_HEADER_HPP_
+#ifndef REGION_HEADER_H_
+#define REGION_HEADER_H_
 
 #include <string>
 #include <vector>
-#include "chunk_info.hpp"
-#include "region_dim.hpp"
+#include "chunk_info.h"
+#include "region_dim.h"
 
 class region_header {
 
@@ -112,4 +112,4 @@ public:
 	std::string to_string(void);
 };
 
-#endif
+#endif // REGION_HEADER_H_

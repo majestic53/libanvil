@@ -18,7 +18,7 @@
  */
 
 #include <sstream>
-#include "region_file.hpp"
+#include "../include/region_file.h"
 
 /*
  * Region file pattern

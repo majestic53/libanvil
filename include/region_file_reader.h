@@ -1,6 +1,6 @@
 /*
- * region_file_reader.hpp
- * Copyright (C) 2012 David Jolly
+ * region_file_reader.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,14 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REGION_FILE_READER_HPP_
-#define REGION_FILE_READER_HPP_
+#ifndef REGION_FILE_READER_H_
+#define REGION_FILE_READER_H_
 
 #include <fstream>
 #include <stdexcept>
 #include <string>
-#include "byte_stream.hpp"
-#include "region_file.hpp"
+#include "byte_stream.h"
+#include "region_file.h"
 
 class region_file_reader : public region_file {
 private:
@@ -197,4 +197,4 @@ public:
 	std::string to_string(void) { return region_file::to_string(); }
 };
 
-#endif
+#endif // REGION_FILE_READER_H_

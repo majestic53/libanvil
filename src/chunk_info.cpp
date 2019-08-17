@@ -18,7 +18,7 @@
  */
 
 #include <sstream>
-#include "chunk_info.hpp"
+#include "../include/chunk_info.h"
 
 /*
  * Chunk info assignment operator

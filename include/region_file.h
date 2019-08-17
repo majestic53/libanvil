@@ -1,6 +1,6 @@
 /*
- * region_file.hpp
- * Copyright (C) 2012 David Jolly
+ * region_file.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,12 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REGION_FILE_HPP_
-#define REGION_FILE_HPP_
+#ifndef REGION_FILE_H_
+#define REGION_FILE_H_
 
 #include <boost/regex.hpp>
 #include <string>
-#include "region.hpp"
+#include "region.h"
 
 class region_file {
 public:
@@ -141,4 +141,4 @@ public:
 	virtual std::string to_string(void);
 };
 
-#endif
+#endif // REGION_FILE_H_

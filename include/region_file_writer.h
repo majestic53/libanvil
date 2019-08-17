@@ -1,6 +1,6 @@
 /*
- * region_file_writer.hpp
- * Copyright (C) 2012 David Jolly
+ * region_file_writer.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,12 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REGION_FILE_WRITER_HPP_
-#define REGION_FILE_WRITER_HPP_
+#ifndef REGION_FILE_WRITER_H_
+#define REGION_FILE_WRITER_H_
 
 #include <fstream>
 #include <string>
-#include "region_file.hpp"
+#include "region_file.h"
 
 class region_file_writer : public region_file {
 private:
@@ -90,4 +90,4 @@ public:
 	void write(void);
 };
 
-#endif
+#endif // REGION_FILE_WRITER_H_

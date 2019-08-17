@@ -1,91 +1,92 @@
-# Libanvil Makefile
-# Copyright (C) 2012 David Jolly
+# LibAnvil
+# Copyright (C) 2012 - 2019 David Jolly
+#
+# LibAnvil is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# LibAnvil is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-CC=g++
-SRC=src/
-TAG=src/tag/
-OUT=libanvil.a
-FLAG=-std=c++0x -O3 -funroll-all-loops
+BUILD_FLAGS_DBG=BUILD_FLAGS=-g
+BUILD_FLAGS_REL=BUILD_FLAGS=-O3\ -DNDEBUG
+DIR_BIN=./
+DIR_BUILD=./build/
+DIR_ROOT=./
+DIR_SRC=./src/
+JOB_SLOTS=4
+LIB=libanvil.a
 
-all: tag anvil build
+all: release
 
-build: 
-	ar rcs $(OUT) $(SRC)byte_stream.o $(SRC)chunk_info.o $(SRC)chunk_tag.o $(SRC)compression.o $(SRC)region.o $(SRC)region_file.o $(SRC)region_file_reader.o $(SRC)region_file_writer.o $(SRC)region_header.o $(TAG)byte_array_tag.o $(TAG)byte_tag.o $(TAG)compound_tag.o $(TAG)double_tag.o $(TAG)end_tag.o $(TAG)float_tag.o $(TAG)generic_tag.o $(TAG)int_array_tag.o $(TAG)int_tag.o $(TAG)list_tag.o $(TAG)long_tag.o $(TAG)long_array_tag.o $(TAG)short_tag.o $(TAG)string_tag.o
+debug: begin_debug clean init lib_debug end
+
+release: begin_release clean init lib_release end
+
+### SETUP ###
+
+begin_debug:
+	@echo ''
+	@echo '============================================'
+	@echo 'BUILDING LIBANVIL (DEBUG)'
+	@echo '============================================'
+
+begin_release:
+	@echo ''
+	@echo '============================================'
+	@echo 'BUILDING LIBANVIL (RELEASE)'
+	@echo '============================================'
 
 clean:
-	rm -f $(OUT)
-	rm -f $(SRC)*.o
-	rm -f $(TAG)*.o
+	rm -f $(DIR_BIN)$(LIB)
+	rm -rf $(DIR_BUILD)
 
-anvil: byte_stream.o chunk_info.o chunk_tag.o compression.o region.o region_file.o region_file_reader.o region_file_writer.o region_header.o
+end:
+	@echo ''
+	@echo '============================================'
+	@echo 'BUILD DONE'
+	@echo '============================================'
+	@echo ''
 
-byte_array_tag.o: $(TAG)byte_array_tag.cpp $(TAG)byte_array_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)byte_array_tag.cpp -o $(TAG)byte_array_tag.o
+init:
+	mkdir -p $(DIR_BUILD)
 
-byte_stream.o: $(SRC)byte_stream.cpp $(SRC)byte_stream.hpp
-	$(CC) $(FLAG) -c $(SRC)byte_stream.cpp -o $(SRC)byte_stream.o
+### LIBRARY ###
 
-byte_tag.o: $(TAG)byte_tag.cpp $(TAG)byte_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)byte_tag.cpp -o $(TAG)byte_tag.o
+lib_debug:
+	@echo ''
+	@echo '============================================'
+	@echo 'BUILDING LIBRARIES (DEBUG)'
+	@echo '============================================'
+	cd $(DIR_SRC) && make $(BUILD_FLAGS_DBG) build -j$(JOB_SLOTS)
+	cd $(DIR_SRC) && make archive
 
-chunk_info.o: $(SRC)chunk_info.cpp $(SRC)chunk_info.hpp
-	$(CC) $(FLAG) -c $(SRC)chunk_info.cpp -o $(SRC)chunk_info.o
+lib_release:
+	@echo ''
+	@echo '============================================'
+	@echo 'BUILDING LIBRARIES (RELEASE)'
+	@echo '============================================'
+	cd $(DIR_SRC) && make $(BUILD_FLAGS_REL) build -j$(JOB_SLOTS)
+	cd $(DIR_SRC) && make archive
 
-chunk_tag.o: $(SRC)chunk_tag.cpp $(SRC)chunk_tag.hpp
-	$(CC) $(FLAG) -c $(SRC)chunk_tag.cpp -o $(SRC)chunk_tag.o
+### MISC ###
 
-compression.o: $(SRC)compression.cpp $(SRC)compression.hpp
-	$(CC) $(FLAG) -c $(SRC)compression.cpp -o $(SRC)compression.o
+lines:
+	@echo ''
+	@echo '============================================'
+	@echo 'CALCULATING LINE COUNT'
+	@echo '============================================'
+	cloc $(DIR_ROOT)
 
-compound_tag.o: $(TAG)compound_tag.cpp $(TAG)compound_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)compound_tag.cpp -o $(TAG)compound_tag.o
-
-double_tag.o: $(TAG)double_tag.cpp $(TAG)double_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)double_tag.cpp -o $(TAG)double_tag.o
-
-end_tag.o: $(TAG)end_tag.cpp $(TAG)end_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)end_tag.cpp -o $(TAG)end_tag.o
-
-float_tag.o: $(TAG)float_tag.cpp $(TAG)float_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)float_tag.cpp -o $(TAG)float_tag.o
-
-generic_tag.o: $(TAG)generic_tag.cpp $(TAG)generic_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)generic_tag.cpp -o $(TAG)generic_tag.o
-
-int_array_tag.o: $(TAG)int_array_tag.cpp $(TAG)int_array_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)int_array_tag.cpp -o $(TAG)int_array_tag.o
-
-int_tag.o: $(TAG)int_tag.cpp $(TAG)int_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)int_tag.cpp -o $(TAG)int_tag.o
-
-list_tag.o: $(TAG)list_tag.cpp $(TAG)list_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)list_tag.cpp -o $(TAG)list_tag.o
-
-long_tag.o: $(TAG)long_tag.cpp $(TAG)long_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)long_tag.cpp -o $(TAG)long_tag.o
-
-long_array_tag.o: $(TAG)long_array_tag.cpp $(TAG)long_array_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)long_array_tag.cpp -o $(TAG)long_array_tag.o
-
-region.o: $(SRC)region.cpp $(SRC)region.hpp
-	$(CC) $(FLAG) -c $(SRC)region.cpp -o $(SRC)region.o
-
-region_file.o: $(SRC)region_file.cpp $(SRC)region_file.hpp
-	$(CC) $(FLAG) -c $(SRC)region_file.cpp -o $(SRC)region_file.o
-
-region_file_reader.o: $(SRC)region_file_reader.cpp $(SRC)region_file_reader.hpp
-	$(CC) $(FLAG) -c $(SRC)region_file_reader.cpp -o $(SRC)region_file_reader.o
-
-region_file_writer.o: $(SRC)region_file_writer.cpp $(SRC)region_file_writer.hpp
-	$(CC) $(FLAG) -c $(SRC)region_file_writer.cpp -o $(SRC)region_file_writer.o
-
-region_header.o: $(SRC)region_header.cpp $(SRC)region_header.hpp
-	$(CC) $(FLAG) -c $(SRC)region_header.cpp -o $(SRC)region_header.o
-
-short_tag.o: $(TAG)short_tag.cpp $(TAG)short_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)short_tag.cpp -o $(TAG)short_tag.o
-
-string_tag.o: $(TAG)string_tag.cpp $(TAG)string_tag.hpp
-	$(CC) $(FLAG) -c $(TAG)string_tag.cpp -o $(TAG)string_tag.o
-
-tag: byte_array_tag.o byte_tag.o compound_tag.o double_tag.o end_tag.o float_tag.o generic_tag.o int_array_tag.o int_tag.o list_tag.o long_tag.o long_array_tag.o short_tag.o string_tag.o
+static:
+	@echo ''
+	@echo '============================================'
+	@echo 'RUNNING STATIC ANALYSIS'
+	@echo '============================================'
+	cppcheck --enable=all --std=c++11 $(DIR_SRC) $(DIR_TEST) $(DIR_TOOL)

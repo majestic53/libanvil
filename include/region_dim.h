@@ -1,6 +1,6 @@
 /*
- * region_dim.hpp
- * Copyright (C) 2012 David Jolly
+ * region_dim.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REGION_DIM_HPP_
-#define REGION_DIM_HPP_
+#ifndef REGION_DIM_H_
+#define REGION_DIM_H_
 
 class region_dim {
 public:
@@ -59,4 +59,4 @@ public:
 	static const unsigned int SECTOR_SIZE = 4096;
 };
 
-#endif
+#endif // REGION_DIM_H_

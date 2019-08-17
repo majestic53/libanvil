@@ -18,8 +18,8 @@
  */
 
 #include <sstream>
-#include "../byte_stream.hpp"
-#include "double_tag.hpp"
+#include "../../include/byte_stream.h"
+#include "../../include/tag/double_tag.h"
 
 /*
  * Double tag assignment operator

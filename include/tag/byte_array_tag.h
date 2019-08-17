@@ -1,6 +1,6 @@
 /*
- * byte_array_tag.hpp
- * Copyright (C) 2012 David Jolly
+ * byte_array_tag.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,12 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BYTE_ARRAY_TAG_HPP_
-#define BYTE_ARRAY_TAG_HPP_
+#ifndef BYTE_ARRAY_TAG_H_
+#define BYTE_ARRAY_TAG_H_
 
 #include <string>
 #include <vector>
-#include "generic_tag.hpp"
+#include "generic_tag.h"
 
 class byte_array_tag : public generic_tag {
 private:
@@ -130,4 +130,4 @@ public:
 	std::string to_string(unsigned int tab);
 };
 
-#endif
+#endif // BYTE_ARRAY_TAG_H_

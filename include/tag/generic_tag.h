@@ -1,6 +1,6 @@
 /*
- * generic_tag.hpp
- * Copyright (C) 2012 David Jolly
+ * generic_tag.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GENERIC_TAG_HPP_
-#define GENERIC_TAG_HPP_
+#ifndef GENERIC_TAG_H_
+#define GENERIC_TAG_H_
 
 #include <sstream>
 #include <string>
@@ -92,7 +92,7 @@ public:
 	/*
 	 * Return a generic tag's data
 	 */
-	virtual std::vector<char> get_data(bool list_ele) { return this->get_data(list_ele); }
+	virtual std::vector<char> get_data(bool list_ele) = 0;
 
 	/*
 	 * Return a generic tag's name
@@ -125,4 +125,4 @@ public:
 	static std::string type_to_string(unsigned char type);
 };
 
-#endif
+#endif // GENERIC_TAG_H_

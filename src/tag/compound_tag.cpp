@@ -18,9 +18,9 @@
  */
 
 #include <sstream>
-#include "../byte_stream.hpp"
-#include "compound_tag.hpp"
-#include "end_tag.hpp"
+#include "../../include/byte_stream.h"
+#include "../../include/tag/compound_tag.h"
+#include "../../include/tag/end_tag.h"
 
 /*
  * Compound tag assignment operator

@@ -19,7 +19,7 @@
 
 #include <cstring>
 #include <zlib.h>
-#include "compression.hpp"
+#include "../include/compression.h"
 
 /*
  * Deflate a char buffer

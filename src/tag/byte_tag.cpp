@@ -18,8 +18,8 @@
  */
 
 #include <sstream>
-#include "../byte_stream.hpp"
-#include "byte_tag.hpp"
+#include "../../include/byte_stream.h"
+#include "../../include/tag/byte_tag.h"
 
 /*
  * Byte tag assignment operator

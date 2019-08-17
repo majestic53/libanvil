@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "generic_tag.hpp"
+#include "../../include/tag/generic_tag.h"
 
 /*
  * Generic tag assignment operator

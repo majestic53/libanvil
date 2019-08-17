@@ -18,7 +18,7 @@
  */
 
 #include <sstream>
-#include "byte_stream.hpp"
+#include "../include/byte_stream.h"
 
 /*
  * Byte stream constructor

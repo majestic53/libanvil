@@ -21,8 +21,8 @@
  */
 
 #include <sstream>
-#include "../byte_stream.hpp"
-#include "long_array_tag.hpp"
+#include "../../include/byte_stream.h"
+#include "../../include/tag/long_array_tag.h"
 
 /*
  * Integer array tag assignment operator

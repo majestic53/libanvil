@@ -18,8 +18,8 @@
  */
 
 #include <sstream>
-#include "../byte_stream.hpp"
-#include "short_tag.hpp"
+#include "../../include/byte_stream.h"
+#include "../../include/tag/short_tag.h"
 
 /*
  * Short tag assignment operator

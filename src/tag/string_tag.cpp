@@ -18,8 +18,8 @@
  */
 
 #include <sstream>
-#include "../byte_stream.hpp"
-#include "string_tag.hpp"
+#include "../../include/byte_stream.h"
+#include "../../include/tag/string_tag.h"
 
 /*
  * String tag assignment operator

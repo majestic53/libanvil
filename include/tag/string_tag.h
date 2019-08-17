@@ -1,6 +1,6 @@
 /*
- * string_tag.hpp
- * Copyright (C) 2012 David Jolly
+ * string_tag.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,12 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef STRING_TAG_HPP_
-#define STRING_TAG_HPP_
+#ifndef STRING_TAG_H_
+#define STRING_TAG_H_
 
 #include <string>
 #include <vector>
-#include "generic_tag.hpp"
+#include "generic_tag.h"
 
 class string_tag : public generic_tag {
 private:
@@ -95,4 +95,4 @@ public:
 	std::string to_string(unsigned int tab);
 };
 
-#endif
+#endif // STRING_TAG_H_

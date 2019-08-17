@@ -18,8 +18,8 @@
  */
 
 #include <sstream>
-#include "../byte_stream.hpp"
-#include "byte_array_tag.hpp"
+#include "../../include/byte_stream.h"
+#include "../../include/tag/byte_array_tag.h"
 
 /*
  * Byte array tag assignment operator

@@ -1,6 +1,6 @@
 /*
- * chunk_info.hpp
- * Copyright (C) 2012 David Jolly
+ * chunk_info.h
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CHUNK_INFO_HPP_
-#define CHUNK_INFO_HPP_
+#ifndef CHUNK_INFO_H_
+#define CHUNK_INFO_H_
 
 #include <string>
 
@@ -128,4 +128,4 @@ public:
 	std::string to_string(void);
 };
 
-#endif
+#endif // CHUNK_INFO_H_

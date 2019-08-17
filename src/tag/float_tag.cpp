@@ -18,8 +18,8 @@
  */
 
 #include <sstream>
-#include "../byte_stream.hpp"
-#include "float_tag.hpp"
+#include "../../include/byte_stream.h"
+#include "../../include/tag/float_tag.h"
 
 /*
  * Float tag assignment operator

@@ -20,11 +20,11 @@
 #include <sstream>
 #include <stdexcept>
 #include <vector>
-#include "byte_stream.hpp"
-#include "chunk_info.hpp"
-#include "compression.hpp"
-#include "region_dim.hpp"
-#include "region_file_writer.hpp"
+#include "../include/byte_stream.h"
+#include "../include/chunk_info.h"
+#include "../include/compression.h"
+#include "../include/region_dim.h"
+#include "../include/region_file_writer.h"
 
 /*
  * Region file writer assignment operator
