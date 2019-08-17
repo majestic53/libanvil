@@ -35,6 +35,7 @@
 #include "tag/int_array_tag.hpp"
 #include "tag/list_tag.hpp"
 #include "tag/long_tag.hpp"
+#include "tag/long_array_tag.hpp"
 #include "tag/short_tag.hpp"
 #include "tag/string_tag.hpp"
 
@@ -307,6 +308,9 @@ generic_tag *region_file_reader::parse_tag(byte_stream &stream, bool is_list, ch
 		} break;
 		case generic_tag::INT_ARRAY:
 			tag = new int_array_tag(name, read_array_value<int>(stream));
+			break;
+		case generic_tag::LONG_ARRAY:
+			tag = new long_array_tag(name, read_array_value<long>(stream));
 			break;
 		default:
 			throw std::runtime_error("Unknown tag type");
