@@ -10,7 +10,7 @@ Table of Contents
 
 1. [About](https://github.com/majestic53/libanvil#about) -- About the project
 2. [Building](https://github.com/majestic53/libanvil#building) -- How to build the project
-2. [Building](https://github.com/majestic53/libanvil#usage) -- How to use the project
+2. [Usage](https://github.com/majestic53/libanvil#usage) -- How to use the project
 3. [Changelog](https://github.com/majestic53/libanvil#changelog) -- Log of project changes
 
 About

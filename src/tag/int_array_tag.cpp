@@ -1,6 +1,6 @@
 /*
  * int_array_tag.cpp
- * Copyright (C) 2012 David Jolly
+ * Copyright (C) 2012 - 2019 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
