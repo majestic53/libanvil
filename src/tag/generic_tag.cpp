@@ -103,6 +103,9 @@ std::string generic_tag::type_to_string(unsigned char type) {
 			break;
 		case INT_ARRAY: ss << "INT ARRAY";
 			break;
+		case LONG_ARRAY:
+			ss << "LONG ARRAY";
+			break;
 		default: ss << "UNKNOWN";
 			break;
 	}
