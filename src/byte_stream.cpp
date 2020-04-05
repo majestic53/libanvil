@@ -1,6 +1,6 @@
 /*
  * byte_stream.cpp
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@ byte_stream::byte_stream(const std::string &buff) {
 /*
  * Byte stream constructor
  */
-byte_stream::byte_stream(std::vector<char> &buff) {
+byte_stream::byte_stream(const std::vector<char> &buff) {
 	pos = 0;
 	this->buff = buff;
 	swap = NO_SWAP_ENDIAN;
@@ -192,7 +192,7 @@ bool byte_stream::operator>>(double &output) {
  */
 unsigned int byte_stream::available(void) {
 	unsigned int remaining = buff.size() - pos;
-	if(remaining <= 0)
+	if(remaining == 0)
 		return END_OF_STREAM;
 	return remaining;
 }

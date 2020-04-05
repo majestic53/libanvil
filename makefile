@@ -1,5 +1,5 @@
 # LibAnvil
-# Copyright (C) 2012 - 2019 David Jolly
+# Copyright (C) 2012 - 2020 David Jolly
 #
 # LibAnvil is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,8 +16,10 @@
 
 BUILD_FLAGS_DBG=BUILD_FLAGS=-g
 BUILD_FLAGS_REL=BUILD_FLAGS=-O3\ -DNDEBUG
-DIR_BIN=./
+DIR_BIN=./bin/
+DIR_BIN_LIB=./bin/lib/
 DIR_BUILD=./build/
+DIR_EXAMPLE=./example/
 DIR_ROOT=./
 DIR_SRC=./src/
 JOB_SLOTS=4
@@ -25,9 +27,9 @@ LIB=libanvil.a
 
 all: release
 
-debug: begin_debug clean init lib_debug end
+debug: begin_debug clean init lib_debug exe_debug end
 
-release: begin_release clean init lib_release end
+release: begin_release clean init lib_release exe_release end
 
 ### SETUP ###
 
@@ -44,7 +46,7 @@ begin_release:
 	@echo '============================================'
 
 clean:
-	rm -f $(DIR_BIN)$(LIB)
+	rm -rf $(DIR_BIN)
 	rm -rf $(DIR_BUILD)
 
 end:
@@ -55,6 +57,7 @@ end:
 	@echo ''
 
 init:
+	mkdir -p $(DIR_BIN_LIB)
 	mkdir -p $(DIR_BUILD)
 
 ### LIBRARY ###
@@ -74,6 +77,22 @@ lib_release:
 	@echo '============================================'
 	cd $(DIR_SRC) && make $(BUILD_FLAGS_REL) build -j$(JOB_SLOTS)
 	cd $(DIR_SRC) && make archive
+
+### EXECUTABLE ###
+
+exe_debug:
+	@echo ''
+	@echo '============================================'
+	@echo 'BUILDING EXECUTABLES (DEBUG)'
+	@echo '============================================'
+	cd $(DIR_EXAMPLE) && make $(BUILD_FLAGS_DBG)
+
+exe_release:
+	@echo ''
+	@echo '============================================'
+	@echo 'BUILDING EXECUTABLES (RELEASE)'
+	@echo '============================================'
+	cd $(DIR_EXAMPLE) && make $(BUILD_FLAGS_REL)
 
 ### MISC ###
 

@@ -1,6 +1,6 @@
 /*
  * double_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,12 +47,12 @@ public:
 	/*
 	 * Double tag constructor
 	 */
-	double_tag(const std::string &name) : generic_tag(name, DOUBLE) { value = 0; }
+	explicit double_tag(const std::string &name) : generic_tag(name, DOUBLE) { value = 0; }
 
 	/*
 	 * Double tag constructor
 	 */
-	double_tag(double value) : generic_tag(DOUBLE) { this->value = value; }
+	explicit double_tag(double value) : generic_tag(DOUBLE) { this->value = value; }
 
 	/*
 	 * Double tag constructor
@@ -72,17 +72,17 @@ public:
 	/*
 	 * Double tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * Double tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Return a double tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Return a double tag's value
@@ -97,7 +97,7 @@ public:
 	/*
 	 * Return a string representation of a double tag
 	 */
-	std::string to_string(unsigned int tab);
+	std::string to_string(unsigned int tab) override;
 };
 
 #endif // DOUBLE_TAG_H_

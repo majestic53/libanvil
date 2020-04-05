@@ -1,6 +1,6 @@
 /*
  * long_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,12 +47,12 @@ public:
 	/*
 	 * Long tag constructor
 	 */
-	long_tag(const std::string &name) : generic_tag(name, LONG) { value = 0; }
+	explicit long_tag(const std::string &name) : generic_tag(name, LONG) { value = 0; }
 
 	/*
 	 * Long tag constructor
 	 */
-	long_tag(long long value) : generic_tag(LONG) { this->value = value; }
+	explicit long_tag(long long value) : generic_tag(LONG) { this->value = value; }
 
 	/*
 	 * Long tag constructor
@@ -72,17 +72,17 @@ public:
 	/*
 	 * Long tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * Long tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Return a long tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Return a long tag's value
@@ -97,7 +97,7 @@ public:
 	/*
 	 * Return a string representation of a long tag
 	 */
-	std::string to_string(unsigned int tab);
+	std::string to_string(unsigned int tab) override;
 };
 
 #endif // LONG_TAG_H_

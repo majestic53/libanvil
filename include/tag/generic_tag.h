@@ -1,6 +1,6 @@
 /*
  * generic_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -57,7 +57,7 @@ public:
 	/*
 	 * Generic tag constructor
 	 */
-	generic_tag(unsigned char type) : name(""), type(type) { return; }
+	explicit generic_tag(unsigned char type) : name(""), type(type) { return; }
 
 	/*
 	 * Generic tag constructor

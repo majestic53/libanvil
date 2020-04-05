@@ -1,6 +1,6 @@
 /*
  * byte_stream.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -131,7 +131,7 @@ public:
 	/*
 	 * Byte stream constructor
 	 */
-	byte_stream(unsigned int swap) : pos(0), swap(swap) { return; }
+	explicit byte_stream(unsigned int swap) : pos(0), swap(swap) { return; }
 
 	/*
 	 * Byte stream constructor
@@ -141,12 +141,12 @@ public:
 	/*
 	 * Byte stream constructor
 	 */
-	byte_stream(const std::string &buff);
+	explicit byte_stream(const std::string &buff);
 
 	/*
 	 * Byte stream constructor
 	 */
-	byte_stream(std::vector<char> &buff);
+	explicit byte_stream(const std::vector<char> &buff);
 
 	/*
 	 * Byte stream destructor

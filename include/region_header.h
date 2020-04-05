@@ -1,6 +1,6 @@
 /*
  * region_header.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -54,7 +54,7 @@ public:
 	/*
 	 * Region header constructor
 	 */
-	region_header(const chunk_info (&info)[region_dim::CHUNK_COUNT]);
+	explicit region_header(const chunk_info (&info)[region_dim::CHUNK_COUNT]);
 
 	/*
 	 * Region header destructor

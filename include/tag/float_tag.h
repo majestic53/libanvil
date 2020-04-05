@@ -1,6 +1,6 @@
 /*
  * float_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,12 +47,12 @@ public:
 	/*
 	 * Float tag constructor
 	 */
-	float_tag(const std::string &name) : generic_tag(name, FLOAT) { value = 0; }
+	explicit float_tag(const std::string &name) : generic_tag(name, FLOAT) { value = 0; }
 
 	/*
 	 * Float tag constructor
 	 */
-	float_tag(float value) : generic_tag(FLOAT) { this->value = value; }
+	explicit float_tag(float value) : generic_tag(FLOAT) { this->value = value; }
 
 	/*
 	 * Float tag constructor
@@ -72,17 +72,17 @@ public:
 	/*
 	 * Float tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * Float tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Return a float tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Return a float tag's value
@@ -97,7 +97,7 @@ public:
 	/*
 	 * Return a string representation of a float tag
 	 */
-	std::string to_string(unsigned int tab);
+	std::string to_string(unsigned int tab) override;
 };
 
 #endif // FLOAT_TAG_H_

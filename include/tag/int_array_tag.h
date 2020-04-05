@@ -1,6 +1,6 @@
 /*
  * int_array_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -42,22 +42,22 @@ public:
 	/*
 	 * Integer array tag constructor
 	 */
-	int_array_tag(const int_array_tag &other) : generic_tag(other.name, INT_ARRAY) { value = other.value; };
+	int_array_tag(const int_array_tag &other) : generic_tag(other.name, INT_ARRAY), value(other.value) { return; };
 
 	/*
 	 * Integer array tag constructor
 	 */
-	int_array_tag(const std::string &name) : generic_tag(name, INT_ARRAY) { return; }
+	explicit int_array_tag(const std::string &name) : generic_tag(name, INT_ARRAY) { return; }
 
 	/*
 	 * Integer array tag constructor
 	 */
-	int_array_tag(std::vector<int> value) : generic_tag(INT_ARRAY) { this->value = value; }
+	explicit int_array_tag(const std::vector<int> &value) : generic_tag(INT_ARRAY) { this->value = value; }
 
 	/*
 	 * Integer array tag constructor
 	 */
-	int_array_tag(const std::string &name, std::vector<int> value) : generic_tag(name, INT_ARRAY) { this->value = value; }
+	int_array_tag(const std::string &name, const std::vector<int> &value) : generic_tag(name, INT_ARRAY) { this->value = value; }
 
 	/*
 	 * Integer array tag destructor
@@ -72,12 +72,12 @@ public:
 	/*
 	 * Integer array tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * Integer array tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Returns a integer array tag integer at a given index
@@ -97,7 +97,7 @@ public:
 	/*
 	 * Return a integer array tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Return a integer array tag's value
@@ -117,7 +117,7 @@ public:
 	/*
 	 * Set a integer array tag's value
 	 */
-	void set_value(std::vector<int> &value) { this->value = value; }
+	void set_value(const std::vector<int> &value) { this->value = value; }
 
 	/*
 	 * Returns a integer array tag value's size
@@ -127,7 +127,7 @@ public:
 	/*
 	 * Return a string representation of a integer array tag
 	 */
-	std::string to_string(unsigned int tab);
+	std::string to_string(unsigned int tab) override;
 };
 
 #endif // INT_ARRAY_TAG_H_

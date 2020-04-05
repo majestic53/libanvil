@@ -1,6 +1,6 @@
 /*
  * compound_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -42,12 +42,12 @@ public:
 	/*
 	 * Compound tag constructor
 	 */
-	compound_tag(const compound_tag &other) : generic_tag(other.name, COMPOUND) { value = other.value; };
+	compound_tag(const compound_tag &other) : generic_tag(other.name, COMPOUND), value(other.value) { return; };
 
 	/*
 	 * Compound tag constructor
 	 */
-	compound_tag(const std::string &name) : generic_tag(name, COMPOUND) { return; }
+	explicit compound_tag(const std::string &name) : generic_tag(name, COMPOUND) { return; }
 
 	/*
 	 * Compound tag destructor
@@ -62,12 +62,12 @@ public:
 	/*
 	 * Compound tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * Compound tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Returns a compound tag tag at a given index
@@ -87,7 +87,7 @@ public:
 	/*
 	 * Return a compound tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Return a compound tag's value
@@ -107,7 +107,7 @@ public:
 	/*
 	 * Set a compound tag's value
 	 */
-	void set_value(std::vector<generic_tag *> &value) { this->value = value; }
+	void set_value(const std::vector<generic_tag *> &value) { this->value = value; }
 
 	/*
 	 * Returns a compound tag value's size
@@ -117,7 +117,7 @@ public:
 	/*
 	 * Return a string representation of a compound tag
 	 */
-	std::string to_string(unsigned int tab);
+	std::string to_string(unsigned int tab) override;
 };
 
 #endif // COMPOUND_TAG_H_

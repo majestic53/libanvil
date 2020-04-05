@@ -1,6 +1,6 @@
 /*
  * end_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -50,22 +50,22 @@ public:
 	/*
 	 * End tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * End tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Return a end tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Return a string representation of a end tag
 	 */
-	std::string to_string(unsigned int tab) { return generic_tag::to_string(tab); }
+	std::string to_string(unsigned int tab) override { return generic_tag::to_string(tab); }
 };
 
 #endif // END_TAG_H_

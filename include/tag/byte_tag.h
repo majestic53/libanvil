@@ -1,6 +1,6 @@
 /*
  * byte_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,12 +47,12 @@ public:
 	/*
 	 * Byte tag constructor
 	 */
-	byte_tag(const std::string &name) : generic_tag(name, BYTE) { value = 0; }
+	explicit byte_tag(const std::string &name) : generic_tag(name, BYTE) { value = 0; }
 
 	/*
 	 * Byte tag constructor
 	 */
-	byte_tag(char value) : generic_tag(BYTE) { this->value = value; }
+	explicit byte_tag(char value) : generic_tag(BYTE) { this->value = value; }
 
 	/*
 	 * Byte tag constructor
@@ -72,17 +72,17 @@ public:
 	/*
 	 * Byte tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * Byte tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Return a byte tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Return a byte tag's value
@@ -97,7 +97,7 @@ public:
 	/*
 	 * Return a string representation of a byte tag
 	 */
-	std::string to_string(unsigned int tab);
+	std::string to_string(unsigned int tab) override;
 };
 
 #endif // BYTE_TAG_H_

@@ -1,6 +1,6 @@
  /*
  * region_file_reader.cpp
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -231,7 +231,6 @@ bool region_file_reader::is_filled(unsigned int x, unsigned int z) {
  */
 generic_tag *region_file_reader::parse_tag(byte_stream &stream, bool is_list, char list_type) {
 	char type;
-	short name_len;
 	std::string name;
 	generic_tag *tag = NULL, *sub_tag = NULL;
 
@@ -245,7 +244,7 @@ generic_tag *region_file_reader::parse_tag(byte_stream &stream, bool is_list, ch
 	else {
 		type = read_value<char>(stream);
 		if(type != generic_tag::END) {
-			name_len = read_value<short>(stream);
+			short name_len = read_value<short>(stream);
 			for(short i = 0; i < name_len; ++i)
 				name += read_value<char>(stream);
 		}
@@ -322,7 +321,7 @@ generic_tag *region_file_reader::parse_tag(byte_stream &stream, bool is_list, ch
 /*
  * Read a chunk tag from data
  */
-void region_file_reader::parse_chunk_tag(std::vector<char> &data, chunk_tag &tag) {
+void region_file_reader::parse_chunk_tag(const std::vector<char> &data, chunk_tag &tag) {
 	char type;
 	std::string name;
 	generic_tag *sub_tag = NULL;
@@ -429,7 +428,6 @@ void region_file_reader::read_chunks(void) {
 void region_file_reader::read_header(void) {
 	char type;
 	int value;
-	unsigned int offset;
 
 	// check if file is open
 	if(!file.is_open())
@@ -451,7 +449,7 @@ void region_file_reader::read_header(void) {
 
 	// read length and compression type data into header
 	for(unsigned int i = 0; i < region_dim::CHUNK_COUNT; ++i) {
-		offset = reg.get_header().get_info_at(i).get_offset();
+		unsigned int offset = reg.get_header().get_info_at(i).get_offset();
 
 		// skip all empty chunks
 		if(!offset)

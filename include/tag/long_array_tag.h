@@ -3,7 +3,7 @@
 //
 /*
  * long_array_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -45,23 +45,22 @@ public:
 	/*
 	 * Long array tag constructor
 	 */
-	long_array_tag(const long_array_tag &other) : generic_tag(other.name, LONG_ARRAY) { value = other.value; };
+	long_array_tag(const long_array_tag &other) : generic_tag(other.name, LONG_ARRAY), value(other.value) { return; };
 
 	/*
 	 * Integer array tag constructor
 	 */
-	long_array_tag(const std::string &name) : generic_tag(name, LONG_ARRAY) { return; }
+	explicit long_array_tag(const std::string &name) : generic_tag(name, LONG_ARRAY) { return; }
 
 	/*
 	 * Long array tag constructor
 	 */
-	long_array_tag(std::vector<long> value) : generic_tag(LONG_ARRAY) { this->value = value; }
+	explicit long_array_tag(const std::vector<long> &value) : generic_tag(LONG_ARRAY) { this->value = value; }
 
 	/*
 	 * Long array tag constructor
 	 */
-	long_array_tag(const std::string &name, std::vector<long> value) : generic_tag(name,
-																				   LONG_ARRAY) { this->value = value; }
+	long_array_tag(const std::string &name, const std::vector<long> &value) : generic_tag(name, LONG_ARRAY) { this->value = value; }
 
 	/*
 	 * Long array tag destructor
@@ -76,12 +75,12 @@ public:
 	/*
 	 * Integer array tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * Integer array tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Returns a long array tag integer at a given index
@@ -101,7 +100,7 @@ public:
 	/*
 	 * Return a integer array tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Return a integer array tag's value
@@ -121,7 +120,7 @@ public:
 	/*
 	 * Set a integer array tag's value
 	 */
-	void set_value(std::vector<long> &value) { this->value = value; }
+	void set_value(const std::vector<long> &value) { this->value = value; }
 
 	/*
 	 * Returns a long array tag value's size
@@ -131,7 +130,7 @@ public:
 	/*
 	 * Return a string representation of a long array tag
 	 */
-	std::string to_string(unsigned int tab);
+	std::string to_string(unsigned int tab) override;
 };
 
 #endif // LONG_ARRAY_TAG_H_

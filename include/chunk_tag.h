@@ -1,6 +1,6 @@
 /*
  * chunk_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -53,7 +53,7 @@ public:
 	/*
 	 * Chunk tag constructor
 	 */
-	chunk_tag(const compound_tag &root) : root(root) { return; }
+	explicit chunk_tag(const compound_tag &root) : root(root) { return; }
 
 	/*
 	 * Chunk tag destructor
@@ -125,7 +125,7 @@ public:
 	/*
 	 * Sets a chunk tag's root tag
 	 */
-	void set_root_tag(compound_tag &root) { this->root = root; }
+	void set_root_tag(const compound_tag &root) { this->root = root; }
 
 	/*
 	 * Returns a string representation of a chunk tag

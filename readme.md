@@ -16,7 +16,7 @@ Table of Contents
 About
 =
 
-The project is implemented in C++ and exposes a simple API, described in ```include/region*.h``` and ```libanvil.a```.
+The project is implemented in C++ and exposes a simple API, described in ```include/region*.h``` and ```bin/lib/libanvil.a```.
 
 ### What It Can Do
 
@@ -152,6 +152,14 @@ int main(int argc, char *argv[]) {
 
 Changelog
 =
+
+### Version 0.1.2014
+
+*Updated: 4/5/2020*
+
+* Minor code cleanup
+* Updated build process
+* Added example program
 
 ### Version 0.1.1933
 

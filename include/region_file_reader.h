@@ -1,6 +1,6 @@
 /*
  * region_file_reader.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -37,7 +37,7 @@ private:
 	/*
 	 * Read a chunk tag from data
 	 */
-	void parse_chunk_tag(std::vector<char> &data, chunk_tag &tag);
+	void parse_chunk_tag(const std::vector<char> &data, chunk_tag &tag);
 
 	/*
 	 * Read a tag from data
@@ -104,7 +104,7 @@ public:
 	/*
 	 * Region file reader constructor
 	 */
-	region_file_reader(const std::string &path) : region_file(path) { return; }
+	explicit region_file_reader(const std::string &path) : region_file(path) { return; }
 
 	/*
 	 * Region file reader constructor
@@ -194,7 +194,7 @@ public:
 	/*
 	 * Returns a string representation of a region file reader
 	 */
-	std::string to_string(void) { return region_file::to_string(); }
+	std::string to_string(void) override { return region_file::to_string(); }
 };
 
 #endif // REGION_FILE_READER_H_

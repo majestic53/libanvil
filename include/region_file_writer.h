@@ -1,6 +1,6 @@
 /*
  * region_file_writer.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,7 +47,7 @@ public:
 	/*
 	 * Region file writer constructor
 	 */
-	region_file_writer(const std::string &path) : region_file(path) { return; }
+	explicit region_file_writer(const std::string &path) : region_file(path) { return; }
 
 	/*
 	 * Region file writer constructor
@@ -82,7 +82,7 @@ public:
 	/*
 	 * Returns a string representation of a region file writer
 	 */
-	std::string to_string(void) { return region_file::to_string(); }
+	std::string to_string(void) override { return region_file::to_string(); }
 
 	/*
 	 * Write a region file to file

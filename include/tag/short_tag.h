@@ -1,6 +1,6 @@
 /*
  * short_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,12 +47,12 @@ public:
 	/*
 	 * Short tag constructor
 	 */
-	short_tag(const std::string &name) : generic_tag(name, SHORT) { value = 0; }
+	explicit short_tag(const std::string &name) : generic_tag(name, SHORT) { value = 0; }
 
 	/*
 	 * Short tag constructor
 	 */
-	short_tag(short value) : generic_tag(SHORT) { this->value = value; }
+	explicit short_tag(short value) : generic_tag(SHORT) { this->value = value; }
 
 	/*
 	 * Short tag constructor
@@ -72,17 +72,17 @@ public:
 	/*
 	 * Short tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * Short tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Return a short tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Return a short tag's value
@@ -97,7 +97,7 @@ public:
 	/*
 	 * Return a string representation of a short tag
 	 */
-	std::string to_string(unsigned int tab);
+	std::string to_string(unsigned int tab) override;
 };
 
 #endif // SHORT_TAG_H_

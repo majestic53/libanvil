@@ -1,6 +1,6 @@
 /*
  * list_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,12 +47,12 @@ public:
 	/*
 	 * List tag constructor
 	 */
-	list_tag(const list_tag &other) : generic_tag(other.name, LIST), ele_type(other.ele_type) { value = other.value; };
+	list_tag(const list_tag &other) : generic_tag(other.name, LIST), ele_type(other.ele_type), value(other.value) { return; };
 
 	/*
 	 * List tag constructor
 	 */
-	list_tag(char ele_type) : generic_tag(LIST), ele_type(ele_type) { return; }
+	explicit list_tag(char ele_type) : generic_tag(LIST), ele_type(ele_type) { return; }
 
 	/*
 	 * List tag constructor
@@ -72,12 +72,12 @@ public:
 	/*
 	 * List tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * List tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Returns a list tag tag at a given index
@@ -97,7 +97,7 @@ public:
 	/*
 	 * Return a list tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Returns a list tag's element type
@@ -122,7 +122,7 @@ public:
 	/*
 	 * Set a list tag's value
 	 */
-	void set_value(std::vector<generic_tag *> &value) { this->value = value; }
+	void set_value(const std::vector<generic_tag *> &value) { this->value = value; }
 
 	/*
 	 * Returns a list tag value's size
@@ -132,7 +132,7 @@ public:
 	/*
 	 * Return a string representation of a list tag
 	 */
-	std::string to_string(unsigned int tab);
+	std::string to_string(unsigned int tab) override;
 };
 
 #endif // LIST_TAG_H_

@@ -1,6 +1,6 @@
 /*
  * string_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -42,12 +42,12 @@ public:
 	/*
 	 * String tag constructor
 	 */
-	string_tag(const string_tag &other) : generic_tag(other.name, STRING) { value = other.value; };
+	string_tag(const string_tag &other) : generic_tag(other.name, STRING), value(other.value) { return; };
 
 	/*
 	 * String tag constructor
 	 */
-	string_tag(const std::string &value) : generic_tag(STRING) { this->value = value; }
+	explicit string_tag(const std::string &value) : generic_tag(STRING) { this->value = value; }
 
 	/*
 	 * String tag constructor
@@ -67,17 +67,17 @@ public:
 	/*
 	 * String tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * String tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Return a string tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Return a string tag's value
@@ -87,12 +87,12 @@ public:
 	/*
 	 * Set a string tag's value
 	 */
-	void set_value(std::string &value) { this->value = value; }
+	void set_value(const std::string &value) { this->value = value; }
 
 	/*
 	 * Return a string representation of a string tag
 	 */
-	std::string to_string(unsigned int tab);
+	std::string to_string(unsigned int tab) override;
 };
 
 #endif // STRING_TAG_H_

@@ -1,6 +1,6 @@
 /*
  * region.cpp
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -210,7 +210,7 @@ void region::set_tags(const chunk_tag (&tags)[region_dim::CHUNK_COUNT]) {
 /*
  * Sets a region tag at a given index
  */
-void region::set_tag_at(unsigned int index, chunk_tag &tag) {
+void region::set_tag_at(unsigned int index, const chunk_tag &tag) {
 
 	// check for valid index
 	if(index >= region_dim::CHUNK_COUNT)

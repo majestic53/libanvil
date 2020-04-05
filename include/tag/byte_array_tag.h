@@ -1,6 +1,6 @@
 /*
  * byte_array_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -42,22 +42,22 @@ public:
 	/*
 	 * Byte array tag constructor
 	 */
-	byte_array_tag(const byte_array_tag &other) : generic_tag(other.name, BYTE_ARRAY) { value = other.value; };
+	byte_array_tag(const byte_array_tag &other) : generic_tag(other.name, BYTE_ARRAY), value(other.value) { return; };
 
 	/*
 	 * Byte array tag constructor
 	 */
-	byte_array_tag(const std::string &name) : generic_tag(name, BYTE_ARRAY) { return; }
+	explicit byte_array_tag(const std::string &name) : generic_tag(name, BYTE_ARRAY) { return; }
 
 	/*
 	 * Byte array tag constructor
 	 */
-	byte_array_tag(std::vector<char> value) : generic_tag(BYTE_ARRAY) { this->value = value; }
+	explicit byte_array_tag(const std::vector<char> &value) : generic_tag(BYTE_ARRAY) { this->value = value; }
 
 	/*
 	 * Byte array tag constructor
 	 */
-	byte_array_tag(const std::string &name, std::vector<char> value) : generic_tag(name, BYTE_ARRAY) { this->value = value; }
+	byte_array_tag(const std::string &name, const std::vector<char> &value) : generic_tag(name, BYTE_ARRAY) { this->value = value; }
 
 	/*
 	 * Byte array tag destructor
@@ -72,12 +72,12 @@ public:
 	/*
 	 * Byte array tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * Byte array tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Returns a byte array tag byte at a given index
@@ -97,7 +97,7 @@ public:
 	/*
 	 * Return a byte array tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Return a byte array tag's value
@@ -117,7 +117,7 @@ public:
 	/*
 	 * Set a byte array tag's value
 	 */
-	void set_value(std::vector<char> &value) { this->value = value; }
+	void set_value(const std::vector<char> &value) { this->value = value; }
 
 	/*
 	 * Returns a byte array tag value's size
@@ -127,7 +127,7 @@ public:
 	/*
 	 * Return a string representation of a byte array tag
 	 */
-	std::string to_string(unsigned int tab);
+	std::string to_string(unsigned int tab) override;
 };
 
 #endif // BYTE_ARRAY_TAG_H_

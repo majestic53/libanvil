@@ -1,6 +1,6 @@
 /*
  * region.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -129,7 +129,7 @@ public:
 	/*
 	 * Sets a region's header
 	 */
-	void set_header(region_header &header) { this->header = header; }
+	void set_header(const region_header &header) { this->header = header; }
 
 	/*
 	 * Sets a region's tags
@@ -139,7 +139,7 @@ public:
 	/*
 	 * Sets a region tag at a given index
 	 */
-	void set_tag_at(unsigned int index, chunk_tag &tag);
+	void set_tag_at(unsigned int index, const chunk_tag &tag);
 
 	/*
 	 * Sets a region's x coordinate

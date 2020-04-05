@@ -1,6 +1,6 @@
 /*
  * region_file.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -55,7 +55,7 @@ public:
 	/*
 	 * Region file constructor
 	 */
-	region_file(const std::string &path) : path(path) { return; }
+	explicit region_file(const std::string &path) : path(path) { return; }
 
 	/*
 	 * Region file constructor

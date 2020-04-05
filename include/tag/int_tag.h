@@ -1,6 +1,6 @@
 /*
  * int_tag.h
- * Copyright (C) 2012 - 2019 David Jolly
+ * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,12 +47,12 @@ public:
 	/*
 	 * Integer tag constructor
 	 */
-	int_tag(const std::string &name) : generic_tag(name, INT) { value = 0; }
+	explicit int_tag(const std::string &name) : generic_tag(name, INT) { value = 0; }
 
 	/*
 	 * Integer tag constructor
 	 */
-	int_tag(int value) : generic_tag(INT) { this->value = value; }
+	explicit int_tag(int value) : generic_tag(INT) { this->value = value; }
 
 	/*
 	 * Integer tag constructor
@@ -72,17 +72,17 @@ public:
 	/*
 	 * Integer tag equals operator
 	 */
-	bool operator==(const generic_tag &other);
+	bool operator==(const generic_tag &other) override;
 
 	/*
 	 * Integer tag not-equals operator
 	 */
-	bool operator!=(const generic_tag &other) { return !(*this == other); }
+	bool operator!=(const generic_tag &other) override { return !(*this == other); }
 
 	/*
 	 * Return a integer tag's data
 	 */
-	std::vector<char> get_data(bool list_ele);
+	std::vector<char> get_data(bool list_ele) override;
 
 	/*
 	 * Return a integer tag's value
@@ -97,7 +97,7 @@ public:
 	/*
 	 * Return a string representation of a integer tag
 	 */
-	std::string to_string(unsigned int tab);
+	std::string to_string(unsigned int tab) override;
 };
 
 #endif // INT_TAG_H_
