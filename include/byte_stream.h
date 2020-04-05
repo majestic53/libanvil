@@ -1,5 +1,5 @@
 /*
- * byte_stream.h
+ * LibAnvil
  * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *

@@ -1,5 +1,5 @@
 /*
- * region_file_writer.cpp
+ * LibAnvil
  * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *

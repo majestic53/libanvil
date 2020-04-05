@@ -1,8 +1,5 @@
-//
-// Created by Qiufeng54321 on 2019-08-17.
-//
 /*
- * long_array_tag.h
+ * LibAnvil
  * Copyright (C) 2012 - 2020 David Jolly
  * ----------------------
  *
@@ -19,6 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+//
+// Created by Qiufeng54321 on 2019-08-17.
+//
 
 #ifndef LONG_ARRAY_TAG_H_
 #define LONG_ARRAY_TAG_H_
