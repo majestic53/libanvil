@@ -63,26 +63,30 @@ bool compression::deflate_(std::vector<char> &data) {
 bool compression::inflate_(std::vector<char> &data) {
 	int ret;
 	z_stream zs;
-	char buff[SEG_SIZE];
-	std::vector<char> out_data;
 	unsigned long prev_out = 0;
+	std::vector<unsigned char> in_data, out_data;
 
 	// initialize zlib structure
 	memset(&zs, 0, sizeof(zs));
 	if(inflateInit(&zs) != Z_OK)
 		return false;
 
-	zs.next_in = (Bytef *) data.data();
-	zs.avail_in = data.size();
+	in_data.insert(in_data.begin(), data.begin(), data.end());
+
+	zs.next_in = (Bytef *) in_data.data();
+	zs.avail_in = in_data.size();
 
 	// inflate blocks
 	do {
-		zs.next_out = reinterpret_cast<Bytef *>(buff);
+		std::vector<unsigned char> buff;
+
+		buff.resize(SEG_SIZE, 0);
+		zs.next_out = (Bytef *) buff.data();
 		zs.avail_out = SEG_SIZE;
 
 		// inflate data and place in out_data
 		ret = inflate(&zs, 0);
-		out_data.insert(out_data.end(), buff, buff + (zs.total_out - prev_out));
+		out_data.insert(out_data.end(), buff.begin(), buff.begin() + (zs.total_out - prev_out));
 		prev_out = zs.total_out;
 	} while(ret == Z_OK);
 
@@ -92,6 +96,7 @@ bool compression::inflate_(std::vector<char> &data) {
 		return false;
 
 	// assign to data
-	data = out_data;
+	data.clear();
+	data.insert(data.begin(), out_data.begin(), out_data.end());
 	return true;
 }

@@ -398,11 +398,14 @@ void region_file_reader::read_chunks(void) {
 			continue;
 
 		// Retrieve raw data
-		char raw_data[info.get_length()];
-		std::vector<char> raw_vec;
+		size_t length = info.get_length();
+		std::vector<char> raw_data, raw_vec;
+		raw_data.resize(length, 0);
+		file.clear();
 		file.seekg(info.get_offset(), std::ios::beg);
-		file.read((char *) raw_data, info.get_length());
-		raw_vec.assign(raw_data, raw_data + info.get_length());
+		file.read((char *)&raw_data[0], length);
+		raw_vec.clear();
+		raw_vec.insert(raw_vec.begin(), raw_data.begin(), raw_data.end());
 
 		// check for compression type
 		switch(info.get_type()) {
@@ -410,7 +413,10 @@ void region_file_reader::read_chunks(void) {
 			throw std::runtime_error("Unsupported compression type");
 			break;
 		case chunk_info::ZLIB:
-			compression::inflate_(raw_vec);
+
+			if(compression::inflate_(raw_vec) == false) {
+				throw std::runtime_error("Failed to uncompress chunk");
+			}
 			break;
 		default:
 			throw std::runtime_error("Unknown compression type");

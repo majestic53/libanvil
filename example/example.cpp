@@ -28,12 +28,9 @@ main(int argc, char *argv[]) {
 	// instantiate a file reader
 	region_file_reader reader;
 
-	// create vectors to hold block/height data
-	std::vector<int> blocks, heights;
-
 	// sanity check
 	if(argc != 2) {
-		std::cerr << "Usage: libanvil <path-to-region-file>" << std::endl;
+		std::cerr << "Usage: anvil <path-to-region-file>" << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -44,8 +41,11 @@ main(int argc, char *argv[]) {
 		reader.read();
 
 		// iterate through all possible chunks within a region
-		for(unsigned int z = 0; z < 32; ++z)
-			for(unsigned int x = 0; x < 32; ++x) {
+		for(unsigned int z = 0; z < region_dim::CHUNK_WIDTH; ++z)
+			for(unsigned int x = 0; x < region_dim::CHUNK_WIDTH; ++x) {
+
+				// create vectors to hold block/height data
+				std::vector<int> blocks, heights;
 
 				// this keeps an exception from being thrown
 				// when a non-existant chunk is requested

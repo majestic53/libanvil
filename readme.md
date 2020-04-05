@@ -157,7 +157,7 @@ Changelog
 
 *Updated: 4/5/2020*
 
-* Minor code cleanup
+* Minor code cleanup/bug fixes
 * Updated build process
 * Added example program
 
